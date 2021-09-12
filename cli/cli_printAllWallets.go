@@ -11,7 +11,7 @@ func (cli *Cli) printAllWallets() {
 	bd := database.New()
 	wallets := block.NewWallets(bd)
 	if len(wallets.Wallets) == 0 {
-		fmt.Println("当前节点没有生成或导入的钱包信息！")
+		fmt.Println("No Wallets Found.")
 		return
 	}
 

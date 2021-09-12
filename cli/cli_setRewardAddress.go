@@ -9,5 +9,5 @@ import (
 func (cli *Cli) setRewardAddress(address string) {
 	bc := block.NewBlockchain()
 	bc.SetRewardAddress(address)
-	fmt.Printf("Using address [%s] for receiving mining reward.\n", address)
+	fmt.Printf("Receiving Mining Reward On Address [%s].\n", address)
 }

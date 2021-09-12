@@ -15,7 +15,7 @@ import (
 )
 
 type blockchain struct {
-	BD *database.BlockchainDB //封装的blot结构体
+	BD *database.BlockchainDB
 }
 
 //创建区块链实例
@@ -30,7 +30,7 @@ func NewBlockchain() *blockchain {
 func (bc *blockchain) CreataGenesisTransaction(address string, value int, send Sender) {
 	//判断地址格式是否正确
 	if !IsVaildBitcoinAddress(address) {
-		log.Errorf("地址格式不正确:%s\n", address)
+		log.Errorf("Invalid Address: %s\n", address)
 		return
 	}
 	//创世区块数据
@@ -52,7 +52,7 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	//创世区块后,更新本地最新区块为1并,向全网节点发送当前区块链高度1
 	NewestBlockHeight = 1
 	send.SendVersionToPeers(1)
-	fmt.Println("已成生成创世区块")
+	fmt.Println("Made Genesis Block.")
 	//重置utxo数据库，将创世数据存入
 	utxos := UTXOHandle{bc}
 	utxos.ResetUTXODataBase()
@@ -62,7 +62,7 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 func (bc *blockchain) newGenesisBlockchain(transaction []Transaction) {
 	//判断一下是否已生成创世区块
 	if len(bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket)) != 0 {
-		log.Fatal("不可重复生成创世区块")
+		log.Fatal("Cannot Make Multiple Genesis Blocks")
 	}
 	//生成创世区块
 	genesisBlock := newGenesisBlock(transaction)

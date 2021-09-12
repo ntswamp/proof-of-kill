@@ -10,5 +10,5 @@ func (cli *Cli) resetUTXODB() {
 	bc := block.NewBlockchain()
 	utxos := block.UTXOHandle{bc}
 	utxos.ResetUTXODataBase()
-	fmt.Println("UTXO database has reset")
+	fmt.Println("UTXO Database Has Been Reset.")
 }
