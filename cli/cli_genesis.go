@@ -1,8 +1,8 @@
 package cli
 
 import (
-	block "github.com/corgi-kx/blockchain_golang/blc"
-	"github.com/corgi-kx/blockchain_golang/network"
+	block "github.com/ntswamp/proof-of-kill/blc"
+	"github.com/ntswamp/proof-of-kill/network"
 )
 
 func (cli *Cli) genesis(address string, value int) {

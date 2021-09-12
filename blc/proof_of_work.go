@@ -5,11 +5,13 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"errors"
-	"github.com/corgi-kx/blockchain_golang/util"
-	log "github.com/corgi-kx/logcustom"
 	"math"
 	"math/big"
 	"time"
+
+	"github.com/ntswamp/proof-of-kill/util"
+
+	log "github.com/corgi-kx/logcustom"
 )
 
 //工作量证明(pow)结构体

@@ -1,6 +1,6 @@
 package block
 
-import "github.com/corgi-kx/blockchain_golang/database"
+import "github.com/ntswamp/proof-of-kill/database"
 
 //区块迭代器
 type blockchainIterator struct {

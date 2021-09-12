@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	block "github.com/corgi-kx/blockchain_golang/blc"
-	"github.com/corgi-kx/blockchain_golang/cli"
-	"github.com/corgi-kx/blockchain_golang/database"
-	"github.com/corgi-kx/blockchain_golang/network"
+	block "github.com/ntswamp/proof-of-kill/blc"
+
+	"github.com/ntswamp/proof-of-kill/cli"
+	"github.com/ntswamp/proof-of-kill/database"
+	"github.com/ntswamp/proof-of-kill/network"
+
 	log "github.com/corgi-kx/logcustom"
 	"github.com/spf13/viper"
 )

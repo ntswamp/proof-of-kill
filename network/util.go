@@ -1,10 +1,12 @@
 package network
 
 import (
-	log "github.com/corgi-kx/logcustom"
-	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/multiformats/go-multiaddr"
 	"strings"
+
+	log "github.com/corgi-kx/logcustom"
+	peer "github.com/libp2p/go-libp2p-core/peer"
+	decode "github.com/libp2p/go-libp2p-peer"
+	"github.com/multiformats/go-multiaddr"
 )
 
 //通过固定格式的地址信息,构建出P2P节点信息对象
@@ -20,7 +22,7 @@ func buildPeerInfoByAddr(addrs string) peer.AddrInfo {
 	//拼接成multiAddr数组
 	m := []multiaddr.Multiaddr{multiAddr}
 	//获得host.ID
-	id, err := peer.IDB58Decode(p2p)
+	id, err := decode.IDB58Decode(p2p)
 	if err != nil {
 		log.Error(err)
 	}

@@ -7,10 +7,11 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
-	"github.com/corgi-kx/blockchain_golang/util"
-	log "github.com/corgi-kx/logcustom"
+	"github.com/ntswamp/proof-of-kill/util"
 	"math/big"
 	"os"
+
+	log "github.com/corgi-kx/logcustom"
 )
 
 type bitcoinKeys struct {

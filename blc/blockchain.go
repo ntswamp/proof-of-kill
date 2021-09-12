@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/corgi-kx/blockchain_golang/database"
-	log "github.com/corgi-kx/logcustom"
 	"math/big"
 	"os"
 	"time"
+
+	"github.com/ntswamp/proof-of-kill/database"
+
+	log "github.com/corgi-kx/logcustom"
 )
 
 type blockchain struct {

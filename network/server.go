@@ -9,7 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	block "github.com/corgi-kx/blockchain_golang/blc"
+	block "github.com/ntswamp/proof-of-kill/blc"
+
 	log "github.com/corgi-kx/logcustom"
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"

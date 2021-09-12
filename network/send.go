@@ -2,10 +2,11 @@ package network
 
 import (
 	"bufio"
-	"github.com/corgi-kx/blockchain_golang/blc"
+
 	log "github.com/corgi-kx/logcustom"
-	"github.com/libp2p/go-libp2p-core/peer"
+	peer "github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/protocol"
+	block "github.com/ntswamp/proof-of-kill/blc"
 )
 
 type Send struct {

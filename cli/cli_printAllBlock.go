@@ -1,6 +1,6 @@
 package cli
 
-import block "github.com/corgi-kx/blockchain_golang/blc"
+import block "github.com/ntswamp/proof-of-kill/blc"
 
 func (cli *Cli) printAllBlock() {
 	bc := block.NewBlockchain()

@@ -3,7 +3,9 @@ package network
 import (
 	"bytes"
 	"encoding/gob"
-	block "github.com/corgi-kx/blockchain_golang/blc"
+
+	block "github.com/ntswamp/proof-of-kill/blc"
+
 	log "github.com/corgi-kx/logcustom"
 )
 

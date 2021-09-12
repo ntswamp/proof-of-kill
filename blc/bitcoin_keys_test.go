@@ -3,10 +3,11 @@ package block
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/corgi-kx/blockchain_golang/util"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/ntswamp/proof-of-kill/util"
 )
 
 func TestGetBitcoinKeys(t *testing.T) {
@@ -47,7 +48,7 @@ func TestMnemonicWord(t *testing.T) {
 }
 
 func TestReadTxt(t *testing.T) {
-	file, err := os.Open("D:/programming/golang/GOPATH/src/github.com/corgi-kx/blockchain_golang/blc/chinese_mnemonic_world.txt")
+	file, err := os.Open("./chinese_mnemonic_world.txt")
 	if err != nil {
 		t.Error(err)
 	}

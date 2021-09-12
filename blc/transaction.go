@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/gob"
-	"github.com/corgi-kx/blockchain_golang/util"
+
+	"github.com/ntswamp/proof-of-kill/util"
+
 	log "github.com/corgi-kx/logcustom"
 )
 

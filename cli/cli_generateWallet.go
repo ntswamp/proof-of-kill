@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
-	block "github.com/corgi-kx/blockchain_golang/blc"
-	"github.com/corgi-kx/blockchain_golang/database"
+	block "github.com/ntswamp/proof-of-kill/blc"
+	"github.com/ntswamp/proof-of-kill/database"
 )
 
 func (cli *Cli) generateWallet() {

@@ -3,12 +3,13 @@ package network
 import (
 	"bytes"
 	"fmt"
-	blc "github.com/corgi-kx/blockchain_golang/blc"
-	log "github.com/corgi-kx/logcustom"
-	"github.com/libp2p/go-libp2p-core/network"
+	blc "github.com/ntswamp/proof-of-kill/blc"
 	"io/ioutil"
 	"sync"
 	"time"
+
+	log "github.com/corgi-kx/logcustom"
+	"github.com/libp2p/go-libp2p-core/network"
 )
 
 //对接收到的数据解析出命令,然后对不同的命令分别进行处理

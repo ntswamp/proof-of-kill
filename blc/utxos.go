@@ -8,8 +8,10 @@ import (
 	"bytes"
 	"encoding/gob"
 	"errors"
+
+	"github.com/ntswamp/proof-of-kill/database"
+
 	"github.com/boltdb/bolt"
-	"github.com/corgi-kx/blockchain_golang/database"
 	log "github.com/corgi-kx/logcustom"
 )
 

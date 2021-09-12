@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	block "github.com/corgi-kx/blockchain_golang/blc"
+	block "github.com/ntswamp/proof-of-kill/blc"
 )
 
 func (cli *Cli) getBalance(address string) {
