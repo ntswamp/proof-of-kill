@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	block "github.com/corgi-kx/blockchain_golang/blc"
 	"github.com/corgi-kx/blockchain_golang/cli"
 	"github.com/corgi-kx/blockchain_golang/database"
 	"github.com/corgi-kx/blockchain_golang/network"
 	log "github.com/corgi-kx/logcustom"
 	"github.com/spf13/viper"
-	"os"
 )
 
-//初始化系统,读取config.yaml里面的配置信息并进行赋值
+//initialize the system with values read from config.yaml
 func init() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -40,7 +41,7 @@ func init() {
 	block.TargetBits = uint(mineDifficultyValue)
 	block.ChineseMnwordPath = chineseMnwordPath
 
-	//将日志输出到指定文件
+	//set up logs
 	file, err := os.OpenFile(fmt.Sprintf("%slog%s.txt", logPath, listenPort), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Error(err)
@@ -49,7 +50,7 @@ func init() {
 }
 
 func main() {
-	//引入命令行信息,并进行调用
+	//run the cli
 	c := cli.New()
 	c.Run()
 }
