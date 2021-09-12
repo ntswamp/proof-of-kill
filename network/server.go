@@ -4,6 +4,11 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	block "github.com/corgi-kx/blockchain_golang/blc"
 	log "github.com/corgi-kx/logcustom"
 	"github.com/libp2p/go-libp2p"
@@ -11,10 +16,6 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/protocol"
 	"github.com/multiformats/go-multiaddr"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 //在P2P网络中已发现的节点池
@@ -28,7 +29,7 @@ func StartNode(clier Clier) {
 	//先获取本地区块最新高度
 	bc := block.NewBlockchain()
 	block.NewestBlockHeight = bc.GetLastBlockHeight()
-	log.Infof("[*] 监听IP地址: %s 端口号: %s", ListenHost, ListenPort)
+	log.Infof("[*] Listening on IP address: %s Port: %s", ListenHost, ListenPort)
 	r := rand.Reader
 	// 为本地节点创建RSA密钥对
 	prvKey, _, err := crypto.GenerateKeyPairWithReader(crypto.RSA, 2048, r)
@@ -50,7 +51,7 @@ func StartNode(clier Clier) {
 	localHost = host
 	//写入全局变量本地P2P节点地址详细信息
 	localAddr = fmt.Sprintf("/ip4/%s/tcp/%s/p2p/%s", ListenHost, ListenPort, host.ID().Pretty())
-	log.Infof("[*] 你的P2P地址信息: %s", localAddr)
+	log.Infof("[*] Your P2P address: %s", localAddr)
 	//启动监听本地端口，并且传入一个处理流的函数，当本地节点接收到流的时候回调处理流的函数
 	host.SetStreamHandler(protocol.ID(ProtocolID), handleStream)
 	//寻找p2p网络并加入到节点池里
@@ -61,7 +62,7 @@ func StartNode(clier Clier) {
 	go sendVersionToPeers()
 	//启动程序的命令行输入环境
 	go clier.ReceiveCMD()
-	fmt.Println("本地网络节点已启动,详细信息请查看log日志!")
+	fmt.Println("Local node is established. Check with command: 'tail -f log<your port>.txt'")
 	signalHandle()
 }
 
@@ -115,7 +116,7 @@ func signalHandle() {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	<-sigs
 	send.SendSignOutToPeers()
-	fmt.Println("本地节点已退出")
+	fmt.Println("Local node terminated.")
 	time.Sleep(time.Second)
 	os.Exit(0)
 }

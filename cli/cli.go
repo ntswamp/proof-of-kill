@@ -3,30 +3,30 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	log "github.com/corgi-kx/logcustom"
 	"os"
 	"strconv"
 	"strings"
+
+	log "github.com/corgi-kx/logcustom"
 )
 
 type Cli struct {
 }
 
-//打印帮助提示
 func printUsage() {
 	fmt.Println("----------------------------------------------------------------------------- ")
 	fmt.Println("Usage:")
-	fmt.Println("\thelp                                              打印命令行说明")
-	fmt.Println("\tgenesis  -a DATA  -v DATA                         生成创世区块")
-	fmt.Println("\tsetRewardAddr -a DATA                             设置挖矿奖励地址")
-	fmt.Println("\tgenerateWallet                                    创建新钱包")
-	fmt.Println("\timportMnword -m DATA                              根据助记词导入钱包")
-	fmt.Println("\tprintAllWallets                                   查看本地存在的钱包信息")
-	fmt.Println("\tprintAllAddr                                      查看本地存在的地址信息")
-	fmt.Println("\tgetBalance  -a DATA                               查看用户余额")
-	fmt.Println("\ttransfer -from DATA -to DATA -amount DATA         进行转账操作")
-	fmt.Println("\tprintAllBlock                                     查看所有区块信息")
-	fmt.Println("\tresetUTXODB                                       遍历区块数据，重置UTXO数据库")
+	fmt.Println("\thelp                                              check help message")
+	fmt.Println("\tgenesis  -a DATA  -v DATA                         make genesis block")
+	fmt.Println("\tsetmineaddr -a DATA                               set the address for mining")
+	fmt.Println("\tnewwal                                            make a new wallet")
+	fmt.Println("\timportwal -m DATA                                 import wallets by mnemonic")
+	fmt.Println("\tmywal                                             print all local wallets")
+	fmt.Println("\tmyaddr                                            print all local addresses")
+	fmt.Println("\tbal  -a DATA                                      check balance")
+	fmt.Println("\tsend -from DATA -to DATA -amount DATA             make transfer")
+	fmt.Println("\tchain                                             print the chain")
+	fmt.Println("\tresetutxo                                         reset UTXO data")
 	fmt.Println("------------------------------------------------------------------------------")
 }
 
@@ -54,9 +54,9 @@ func (cli Cli) ReceiveCMD() {
 	}
 }
 
-//用户输入命令的解析
+//parse the cmd
 func (cli Cli) userCmdHandle(data string) {
-	//去除命令前后空格
+	//trim spaces
 	data = strings.TrimSpace(data)
 	var cmd string
 	var context string
@@ -77,32 +77,32 @@ func (cli Cli) userCmdHandle(data string) {
 			log.Fatal(err)
 		}
 		cli.genesis(address, v)
-	case "generateWallet":
+	case "newwal":
 		cli.generateWallet()
-	case "setRewardAddr":
+	case "setmineaddr":
 		addrss := getSpecifiedContent(data, "-a", "")
 		cli.setRewardAddress(addrss)
-	case "importMnword":
+	case "importwal":
 		mnemonicword := getSpecifiedContent(data, "-m", "")
 		cli.importWalletByMnemonicword(mnemonicword)
-	case "printAllAddr":
+	case "myaddr":
 		cli.printAllAddress()
-	case "printAllWallets":
+	case "mywal":
 		cli.printAllWallets()
-	case "printAllBlock":
+	case "chain":
 		cli.printAllBlock()
-	case "getBalance":
+	case "bal":
 		address := getSpecifiedContent(data, "-a", "")
 		cli.getBalance(address)
-	case "resetUTXODB":
+	case "resetutxo":
 		cli.resetUTXODB()
-	case "transfer":
+	case "send":
 		fromString := (context[strings.Index(context, "-from")+len("-from") : strings.Index(context, "-to")])
 		toString := strings.TrimSpace(context[strings.Index(context, "-to")+len("-to") : strings.Index(context, "-amount")])
 		amountString := strings.TrimSpace(context[strings.Index(context, "-amount")+len("-amount"):])
 		cli.transfer(fromString, toString, amountString)
 	default:
-		fmt.Println("无此命令!")
+		fmt.Println("invalid command.")
 		printUsage()
 	}
 }
