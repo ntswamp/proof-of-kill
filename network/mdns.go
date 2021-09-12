@@ -6,7 +6,7 @@ import (
 
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
-	discovery "github.com/libp2p/go-libp2p/p2p/discovery/mdns_legacy"
+	"github.com/libp2p/go-libp2p/p2p/discovery"
 )
 
 type discoveryNotifee struct {
