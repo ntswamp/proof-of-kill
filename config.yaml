@@ -1,6 +1,6 @@
 blockchain:
   #difficulty
-  mine_difficulty_value: 8
+  mine_difficulty_value: 16
   #mining reward
   token_reward_num: 25
   #交易池大小(满足多少条交易才开始进行挖矿)
