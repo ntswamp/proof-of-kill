@@ -20,7 +20,7 @@ func (cli *Cli) importWalletByMnemonicword(mnemonicword string) {
 	bd := database.New()
 	wallets := block.NewWallets(bd)
 	address, privkey, mnemonicWord := wallets.GenerateWallet(bd, block.CreateBitcoinKeysByMnemonicWord, mnemonicwords)
-	fmt.Println("MNEMONIC WORD：", mnemonicWord)
-	fmt.Println("PRIVATE KEY  ：", privkey)
-	fmt.Println("ADDRESS      ：", address)
+	fmt.Println("Mnemonic Word：", mnemonicWord)
+	fmt.Println("Private Key  ：", privkey)
+	fmt.Println("Address      ：", address)
 }

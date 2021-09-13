@@ -15,13 +15,13 @@ func (cli *Cli) printAllWallets() {
 		return
 	}
 
-	fmt.Println("已生成的钱包信息：")
+	fmt.Println("My Wallets：")
 	fmt.Println("==================================================================")
 	for k, v := range wallets.Wallets {
-		fmt.Println("地址:", k)
-		fmt.Printf("公钥:%x\n", v.PublicKey)
-		fmt.Println("私钥:", v.GetPrivateKey())
-		fmt.Println("助记词:", v.MnemonicWord)
+		fmt.Println("Address:", k)
+		fmt.Printf("Pub Key: %x\n", v.PublicKey)
+		fmt.Println("Priv Key:", v.GetPrivateKey())
+		fmt.Println("Mnemonic Word:", v.MnemonicWord)
 		fmt.Println("==================================================================")
 	}
 }
