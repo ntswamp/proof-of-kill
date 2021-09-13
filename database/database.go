@@ -4,9 +4,10 @@
 package database
 
 import (
+	"os"
+
 	"github.com/boltdb/bolt"
 	log "github.com/corgi-kx/logcustom"
-	"os"
 )
 
 var ListenPort string
@@ -18,6 +19,7 @@ const (
 	BlockBucket BucketType = "blocks"
 	AddrBucket  BucketType = "address"
 	UTXOBucket  BucketType = "utxo"
+	AgentBucket BucketType = "agent"
 )
 
 type BlockchainDB struct {

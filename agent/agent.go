@@ -1,9 +1,12 @@
 package agent
 
 import (
+	"bytes"
+	"encoding/gob"
 	"os"
 
 	log "github.com/corgi-kx/logcustom"
+	"github.com/ntswamp/proof-of-kill/database"
 )
 
 type Agent struct {
@@ -80,6 +83,13 @@ func New(name string, class int, weapon int) *Agent {
 }
 
 func (a *Agent) Save() {
+	db := database.New()
+	b := db.View([]byte("MYAGENT"), database.AgentBucket)
+	if len(b) != 0 {
+		log.Warn("Agent Already Exists.")
+		return
+	}
+	db.Put([]byte("MYAGENT"), a.serliazle(), database.AgentBucket)
 
 }
 
@@ -105,4 +115,14 @@ func IsAgentExist(nodeId string) bool {
 
 func (a *Agent) Introduce() {
 	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+}
+
+func (a *Agent) serliazle() []byte {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+	err := encoder.Encode(a)
+	if err != nil {
+		panic(err)
+	}
+	return result.Bytes()
 }

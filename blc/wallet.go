@@ -80,7 +80,7 @@ func (w *wallets) GenerateWallet(bd *database.BlockchainDB, keys func(s []string
 func (w *wallets) storage(address []byte, keys *bitcoinKeys, bd *database.BlockchainDB) {
 	b := bd.View(address, database.AddrBucket)
 	if len(b) != 0 {
-		log.Warn("钱包早已存在于数据库中！")
+		log.Warn("Wallet Already Exists.")
 		return
 	}
 	//将公私钥以地址为键 存入数据库
