@@ -15,12 +15,12 @@ func (cli *Cli) printAllWallets() {
 		return
 	}
 
-	fmt.Println("My Wallets：")
+	fmt.Println("Existing Wallets：")
 	fmt.Println("==================================================================")
 	for k, v := range wallets.Wallets {
 		fmt.Println("Address:", k)
-		fmt.Printf("Pub Key: %x\n", v.PublicKey)
-		fmt.Println("Priv Key:", v.GetPrivateKey())
+		fmt.Printf("Public Key: %x\n", v.PublicKey)
+		fmt.Println("Private Key:", v.GetPrivateKey())
 		fmt.Println("Mnemonic Word:", v.MnemonicWord)
 		fmt.Println("==================================================================")
 	}

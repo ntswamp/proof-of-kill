@@ -47,7 +47,7 @@ func (cli Cli) ReceiveCMD() {
 		fmt.Print("> ")
 		sendData, err := stdReader.ReadString('\n')
 		if err != nil {
-			fmt.Println("Error reading from stdin")
+			fmt.Println("Error Reading From Stdin")
 			panic(err)
 		}
 		cli.userCmdHandle(sendData)
@@ -102,7 +102,7 @@ func (cli Cli) userCmdHandle(data string) {
 		amountString := strings.TrimSpace(context[strings.Index(context, "-amount")+len("-amount"):])
 		cli.transfer(fromString, toString, amountString)
 	default:
-		fmt.Println("invalid command.")
+		fmt.Println("invalid Command.")
 		printUsage()
 	}
 }

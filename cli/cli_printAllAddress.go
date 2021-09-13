@@ -13,10 +13,10 @@ func (cli *Cli) printAllAddress() {
 	bd := database.New()
 	addressList := block.GetAllAddress(bd)
 	if addressList == nil {
-		log.Fatal("No Wallets Found At Current Node.")
+		log.Fatal("No Wallets Found On Current Node.")
 	}
 	fmt.Println("===================================")
-	fmt.Println("Existed Addresses：")
+	fmt.Println("Existing Addresses：")
 	for _, v := range *addressList {
 		fmt.Println(string(v))
 	}
