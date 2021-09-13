@@ -3,7 +3,6 @@ package agent
 import (
 	"bytes"
 	"encoding/gob"
-	"os"
 
 	log "github.com/corgi-kx/logcustom"
 	"github.com/ntswamp/proof-of-kill/database"
@@ -93,24 +92,28 @@ func (a *Agent) Save() {
 
 }
 
-func (a *Agent) Load() {
-	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+func Load() *Agent {
+	db := database.New()
+	b := db.View([]byte("MYAGENT"), database.AgentBucket)
+	if len(b) == 0 {
+		log.Warn("Agent Not Found. Type 'newag' To Create One.")
+		return nil
+	}
+	a := &Agent{}
+	a.deserialize(b)
+	return a
+
 }
 
-func (a *Agent) Remove() {
-	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+func Remove() {
+	db := database.New()
+	db.Delete([]byte("MYAGENT"), database.AgentBucket)
 }
 
 func IsAgentExist(nodeId string) bool {
-	var AgentFileName = "agent_" + nodeId + ".ag"
-	_, err := os.Stat(AgentFileName)
-	if err == nil {
-		return true
-	}
-	if os.IsNotExist(err) {
-		return false
-	}
-	return false
+	db := database.New()
+	b := db.View([]byte("MYAGENT"), database.AgentBucket)
+	return len(b) != 0
 }
 
 func (a *Agent) Introduce() {
@@ -125,4 +128,12 @@ func (a *Agent) serliazle() []byte {
 		panic(err)
 	}
 	return result.Bytes()
+}
+
+func (a *Agent) deserialize(b []byte) {
+	decoder := gob.NewDecoder(bytes.NewReader(b))
+	err := decoder.Decode(a)
+	if err != nil {
+		log.Panic(err)
+	}
 }
