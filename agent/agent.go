@@ -110,7 +110,7 @@ func Remove() {
 	db.Delete([]byte("MYAGENT"), database.AgentBucket)
 }
 
-func IsAgentExist(nodeId string) bool {
+func IsAgentExist() bool {
 	db := database.New()
 	b := db.View([]byte("MYAGENT"), database.AgentBucket)
 	return len(b) != 0
