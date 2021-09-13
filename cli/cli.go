@@ -17,6 +17,8 @@ func printUsage() {
 	fmt.Println("----------------------------------------------------------------------------- ")
 	fmt.Println("Usage:")
 	fmt.Println("\thelp                                              check help message")
+	fmt.Println("\tnewag                                             (re)create an mining agent")
+	fmt.Println("\tmyag                                              check current agent")
 	fmt.Println("\tgenesis  -a DATA  -v DATA                         make genesis block")
 	fmt.Println("\tsetmineaddr -a DATA                               set the address for mining")
 	fmt.Println("\tnewwal                                            make a new wallet")
@@ -69,6 +71,10 @@ func (cli Cli) userCmdHandle(data string) {
 	switch cmd {
 	case "help":
 		printUsage()
+	case "newag":
+		cli.newag()
+	case "myag":
+		cli.myag()
 	case "genesis":
 		address := getSpecifiedContent(data, "-a", "-v")
 		value := getSpecifiedContent(data, "-v", "")
