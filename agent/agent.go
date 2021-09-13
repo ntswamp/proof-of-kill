@@ -1,6 +1,10 @@
 package agent
 
-import log "github.com/corgi-kx/logcustom"
+import (
+	"os"
+
+	log "github.com/corgi-kx/logcustom"
+)
 
 type Agent struct {
 	name   string
@@ -73,6 +77,30 @@ func New(name string, class int, weapon int) *Agent {
 	}
 	a.name = name
 	return a
+}
+
+func (a *Agent) Save() {
+
+}
+
+func (a *Agent) Load() {
+	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+}
+
+func (a *Agent) Remove() {
+	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+}
+
+func IsAgentExist(nodeId string) bool {
+	var AgentFileName = "agent_" + nodeId + ".ag"
+	_, err := os.Stat(AgentFileName)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
 }
 
 func (a *Agent) Introduce() {
