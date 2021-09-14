@@ -9,75 +9,75 @@ import (
 )
 
 type Agent struct {
-	name   string
-	class  string
-	weapon string
-	health int
-	attack int
-	luck   int //-20~20
+	Name   string
+	Class  string
+	Weapon string
+	Health int
+	Attack int
+	Luck   int //-20~20
 }
 
 func New(name string, class int, weapon int) *Agent {
 	a := &Agent{}
 	switch class {
 	case 1:
-		a.class = "Warrior"
-		a.health = 200
-		a.attack = 20
-		a.luck = 5
+		a.Class = "Warrior"
+		a.Health = 200
+		a.Attack = 20
+		a.Luck = 5
 	case 2:
-		a.class = "Mage"
-		a.health = 120
-		a.attack = 35
-		a.luck = 0
+		a.Class = "Mage"
+		a.Health = 120
+		a.Attack = 35
+		a.Luck = 0
 	//archer
 	case 3:
-		a.class = "Archer"
-		a.health = 150
-		a.attack = 20
-		a.luck = 20
+		a.Class = "Archer"
+		a.Health = 150
+		a.Attack = 20
+		a.Luck = 20
 	default:
-		a.class = "Warrior"
-		a.health = 200
-		a.attack = 20
-		a.luck = 5
+		a.Class = "Warrior"
+		a.Health = 200
+		a.Attack = 20
+		a.Luck = 5
 	}
 
 	switch weapon {
 	//warrior
 	case 1:
-		a.weapon = "Two-handed Sword"
-		a.attack = a.attack + 18
-		a.luck = a.luck + 5
+		a.Weapon = "Two-handed Sword"
+		a.Attack = a.Attack + 18
+		a.Luck = a.Luck + 5
 	case 2:
-		a.weapon = "Buckler & Axe"
-		a.attack = a.attack + 10
-		a.health = a.health + 10
-		a.luck = a.luck + 1
+		a.Weapon = "Buckler & Axe"
+		a.Attack = a.Attack + 10
+		a.Health = a.Health + 10
+		a.Luck = a.Luck + 1
 
 	//mage
 	case 3:
-		a.weapon = "Twilight Staff"
-		a.attack = a.attack + 10
-		a.luck = 0
+		a.Weapon = "Twilight Staff"
+		a.Attack = a.Attack + 10
+		a.Luck = 0
 	case 4:
-		a.weapon = "Wand Of Dark Warlock"
-		a.attack = a.attack + 30
-		a.health = a.health - 30
-		a.luck = -10
+		a.Weapon = "Wand Of Dark Warlock"
+		a.Attack = a.Attack + 30
+		a.Health = a.Health - 30
+		a.Luck = -10
 
 	//archer
 	case 5:
-		a.weapon = "Longbow"
-		a.attack = a.attack + 10
-		a.luck = a.luck + 10
+		a.Weapon = "Longbow"
+		a.Attack = a.Attack + 10
+		a.Luck = a.Luck + 10
 	case 6:
-		a.weapon = "Spitfire"
-		a.attack = a.attack + 20
-		a.luck = 0
+		a.Weapon = "Spitfire"
+		a.Attack = a.Attack + 20
+		a.Luck = 0
 
 	}
-	a.name = name
+	a.Name = name
 	return a
 }
 
@@ -117,7 +117,7 @@ func IsAgentExist() bool {
 }
 
 func (a *Agent) Introduce() {
-	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.name, a.class, a.weapon)
+	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.Name, a.Class, a.Weapon)
 }
 
 func (a *Agent) serliazle() []byte {
