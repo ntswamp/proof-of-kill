@@ -63,7 +63,7 @@ func StartNode(clier Clier) {
 	go sendVersionToPeers()
 	//启动程序的命令行输入环境
 	go clier.ReceiveCMD()
-	fmt.Println("Local node is established. Check with command: 'tail -f log<your port>.txt'")
+	fmt.Println("Local Node Established. Check With Command: 'tail -f log<your port>.txt'")
 	signalHandle()
 }
 
@@ -117,7 +117,7 @@ func signalHandle() {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	<-sigs
 	send.SendSignOutToPeers()
-	fmt.Println("Local node terminated.")
+	fmt.Println("Local Node Terminated.")
 	time.Sleep(time.Second)
 	os.Exit(0)
 }
