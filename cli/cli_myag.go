@@ -1,4 +1,4 @@
 package cli
 
-func (cli *Cli) myag() {
+func (cli *Cli) myAg() {
 }

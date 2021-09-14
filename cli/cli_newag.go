@@ -9,12 +9,12 @@ import (
 	"github.com/ntswamp/proof-of-kill/agent"
 )
 
-func (cli *Cli) newag() {
+func (cli *Cli) newAg() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("This Operation Will Remove Current Agent. Continue?(y/n)")
 	fmt.Print("-> ")
 	yn, _ := reader.ReadString('\n')
-	if yn == "n" {
+	if yn == "n\n" {
 		return
 	}
 	if agent.IsAgentExist() {
@@ -32,23 +32,22 @@ func (cli *Cli) newag() {
 		// convert CRLF to LF
 		name = strings.Replace(name, "\n", "", -1)
 
-		fmt.Printf("%s? Such An Impressive Name.\nWelcome To The World Of PoK, %s.\n", name, name)
+		fmt.Printf("Such An Impressive Name.\nWelcome To The World Of PoK, %s.\n\n", name)
 
-		fmt.Println("Now Tell Me Your Class, By The Number:")
+		fmt.Println("Now Tell Me Your Class, By A Number:")
 		fmt.Println("#1 Warrior")
 		fmt.Println("#2 Mage")
 		fmt.Println("#3 Archer")
 		fmt.Print("-> ")
 		_, err := fmt.Scanf("%d", &class)
-		for err != nil {
+		for err != nil || (class != 1 && class != 2 && class != 3) {
 			fmt.Println("Type A Number From 1 to 3:")
 			fmt.Print("-> ")
 			_, err = fmt.Scanf("%d", &class)
 		}
 
 		fmt.Printf("Great. Your Agent Looks Like An Experienced %s.\n", agent.CLASS_TEXT[class])
-		fmt.Printf("Now Pick A Weapon For Your Agent:")
-		fmt.Print("-> ")
+		fmt.Printf("\nNow Pick A Weapon For Your Agent:\n")
 
 		switch class {
 		case agent.CLASS.Warrior:
@@ -56,7 +55,7 @@ func (cli *Cli) newag() {
 			fmt.Println("#2 Buckler & Axe")
 			fmt.Print("-> ")
 			_, err := fmt.Scanf("%d", &weapon)
-			for err != nil {
+			for err != nil || (weapon != 1 && weapon != 2) {
 				fmt.Println("Type A Number From 1 to 2:")
 				fmt.Print("-> ")
 				_, err = fmt.Scanf("%d", &weapon)
@@ -66,7 +65,7 @@ func (cli *Cli) newag() {
 			fmt.Println("#4 Wand Of Dark Warlock")
 			fmt.Print("-> ")
 			_, err := fmt.Scanf("%d", &weapon)
-			for err != nil {
+			for err != nil || (weapon != 3 && weapon != 4) {
 				fmt.Println("Type A Number From 3 to 4:")
 				fmt.Print("-> ")
 				_, err = fmt.Scanf("%d", &weapon)
@@ -76,23 +75,23 @@ func (cli *Cli) newag() {
 			fmt.Println("#6 Spitfire")
 			fmt.Print("-> ")
 			_, err := fmt.Scanf("%d", &weapon)
-			for err != nil {
+			for err != nil || (weapon != 5 && weapon != 6) {
 				fmt.Println("Type A Number From 5 to 6:")
 				fmt.Print("-> ")
 				_, err = fmt.Scanf("%d", &weapon)
 			}
 		}
 
-		fmt.Printf("%s? This Is A Wonderful Pick.", agent.WEAPON_TEXT[weapon])
+		fmt.Printf("%s? This Is A Wonderful Pick.\n\n", agent.WEAPON_TEXT[weapon])
 
-		fmt.Printf("Your Agent Is Fully Primed Now.")
+		fmt.Printf("Your Agent Is Fully Primed Now.\n")
 		fmt.Printf("Name  : %s\n", name)
 		fmt.Printf("Class : %s\n", agent.CLASS_TEXT[class])
 		fmt.Printf("Weapon: %s\n", agent.WEAPON_TEXT[weapon])
-		fmt.Printf("Go With This Perfect Agent?: (y/n)")
+		fmt.Printf("Go With This Perfect Agent?: (y/n)\n")
 		fmt.Print("-> ")
 		yn, _ := reader.ReadString('\n')
-		if yn == "n" {
+		if yn == "n\n" {
 			continue
 		}
 
@@ -108,5 +107,4 @@ func (cli *Cli) newag() {
 			}
 		*/
 	}
-
 }

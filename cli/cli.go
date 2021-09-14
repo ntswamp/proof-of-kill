@@ -72,9 +72,9 @@ func (cli Cli) userCmdHandle(data string) {
 	case "help":
 		printUsage()
 	case "newag":
-		cli.newag()
+		cli.newAg()
 	case "myag":
-		cli.myag()
+		cli.myAg()
 	case "genesis":
 		address := getSpecifiedContent(data, "-a", "-v")
 		value := getSpecifiedContent(data, "-v", "")
