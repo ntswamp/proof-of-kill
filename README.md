@@ -3,7 +3,62 @@
 
 ### testing program：
 
-**1.Launch the Node, Create Wallets, Generate a Genesis Block**
+This demo only supports mac/linux currently, get your golang installed properly on the mentioned OS's.
+https://golang.org/doc/install
+
+
+**Build**
+
+
+```shell
+ go build -mod=vendor -o chain main.go
+```
+<br>
+
+
+**Prepare Multiple Terminals**
+
+为了简化操作，在同一台电脑中启动不同端口来模拟P2P节点（三个窗口用于启动程序，三个窗口用于实时查看日志）
+>实机操作时，如果出现找不到其他节点情况可能是防火墙问题，请关闭防火墙后在试
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118103707708.png)
+
+<br>
+
+**Play With Configuration File**
+  
+  The key field is `listen_port`, different ports stand for different nodes in a simulated P2P network.</br>
+  You can leave other parts default. but don't set `mine_difficulty_value` lower than 24, otherwise you won't see the mining process show up in the log when it done too fast.
+```shell
+ vim config.yaml
+```
+```yaml
+blockchain:
+  # difficulty
+  mine_difficulty_value: 24
+  # mining reward
+  token_reward_num: 10
+  # start mining when this number is reached
+  trade_pool_length: 2
+  # log directory
+  log_path: "./"
+  # directory for mnemonicwords
+  chinese_mnemonic_path: "./chinese_mnemonic_world.txt"
+network:
+  # local monitoring IP
+  listen_host: "127.0.0.1"
+  # local monitoring port
+  listen_port: "9000"
+  # unique identifier of node group(nodes can only discover each other in the same group)
+  rendezvous_string: "pok"
+  # nodes only send data to the nodes with the same protocol id.
+  protocol_id: "/chain/1.1.0"
+
+```
+
+<br>
+
+**Launch the Node, Create Wallets, Generate a Genesis Block**
 
 Launch Node 1
 ```shell
@@ -40,7 +95,7 @@ Check out Node 1's Log by Command:(see mining process in detail.)
 
 <br>
 
-**5.Synchronize**
+**Synchronize**
 
 Launch Node 2, Node 3 with #listen_port# field in the config.yaml set up to 7001,7002.</br>
 Look closer to Node 1's log you will notice that other nodes are detected.
@@ -49,7 +104,7 @@ Look closer to Node 1's log you will notice that other nodes are detected.
 
 <br>
 
-**6.Making Transfer**
+**Making Transfer**
 
 Before transfer, you want to set the address to receive mining reward up, for each node.(if you haven't set it, nodes won't receive any rewards)</br>
 Node 1:
@@ -77,7 +132,7 @@ transaction has been broadcast.
 
 <br>
 
-**7.Checking Balance**
+**Checking Balance**
 
 Node 1 got 100 coins at the beginning, but after transferrd 60 to Node 2 and Node 3, only 40 coins left for Node 1 now.<br>
 Node 2 received 30 from Node 1.<br>
