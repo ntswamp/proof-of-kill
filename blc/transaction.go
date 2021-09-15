@@ -8,15 +8,15 @@ import (
 	"github.com/ntswamp/proof-of-kill/util"
 
 	log "github.com/corgi-kx/logcustom"
+	"github.com/ntswamp/proof-of-kill/agent"
 )
 
 //交易列表信息
 type Transaction struct {
 	TxHash []byte
-	//UTXO输入
-	Vint []TXInput
-	//UTXO输出
-	Vout []TXOutput
+	Vint   []TXInput
+	Vout   []TXOutput
+	Agent  *agent.Agent
 }
 
 //对此笔交易的输入,输出进行hash运算后存入交易hash(txhash)
@@ -90,7 +90,7 @@ func (t *Transaction) customCopy() Transaction {
 	for _, vout := range t.Vout {
 		newVout = append(newVout, TXOutput{vout.Value, vout.PublicKeyHash})
 	}
-	return Transaction{t.TxHash, newVin, newVout}
+	return Transaction{t.TxHash, newVin, newVout, t.Agent}
 }
 
 //判断是否是创世区块的交易
