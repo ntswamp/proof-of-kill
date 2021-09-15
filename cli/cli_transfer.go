@@ -10,5 +10,5 @@ import (
 func (cli Cli) transfer(from, to, amount string) {
 	blc := block.NewBlockchain()
 	blc.CreateTransaction(from, to, amount, network.Send{})
-	fmt.Println("Transfer Request Was Made.")
+	fmt.Println("transaction has been broadcast.")
 }
