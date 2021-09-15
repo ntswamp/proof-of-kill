@@ -20,7 +20,7 @@ https://golang.org/doc/install
 
 You want to simulate multiple nodes of a P2P network by openning multiple terminal windows.
 If you are using VScode, this goal can be easily achieved tapping `Split Terminal` button in the upper right-hand corner of default terminal window.
->实机操作时，如果出现找不到其他节点情况可能是防火墙问题，请关闭防火墙后在试
+>If nodes can't find each other, turn off firewall and try again.
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118103707708.png)
 
