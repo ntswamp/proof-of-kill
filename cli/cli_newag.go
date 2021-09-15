@@ -12,7 +12,7 @@ import (
 /// return true if the creation succeeds.
 func (cli *Cli) newAg() {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("people, you're looking fraught. you must heard that there will be blood when the dark falls later.\nyes, it will.\nbut I know someone hired an strong \"Agent\" to have him survived the killing last night,\nyou may want to take a chance on tavern.(y/n)")
+	fmt.Println("people, you're looking fraught. you must heard that there will be blood when the dark falls later.\nyes, it will.\nbut I know someone hired a strong \"Agent\" to have him survived the killing last night,\nyou may want to take a chance on tavern.(y/n)")
 	fmt.Print("-> ")
 	yn, _ := reader.ReadString('\n')
 	if yn == "n\n" {
