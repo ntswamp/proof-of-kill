@@ -9,16 +9,14 @@ import (
 	"github.com/ntswamp/proof-of-kill/agent"
 )
 
+/// return true if the creation succeeds.
 func (cli *Cli) newAg() {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("This Operation Will Remove Current Agent. Continue?(y/n)")
+	fmt.Println("people, you're looking fraught. you must heard that there will be blood when the dark falls later.\nyes, it will.\nbut I know someone hired an strong \"Agent\" to have him survived the killing last night,\nyou may want to take a chance on tavern.(y/n)")
 	fmt.Print("-> ")
 	yn, _ := reader.ReadString('\n')
 	if yn == "n\n" {
-		return
-	}
-	if agent.IsAgentExist() {
-		agent.Remove()
+		os.Exit(0)
 	}
 
 	for {
@@ -88,7 +86,7 @@ func (cli *Cli) newAg() {
 		fmt.Printf("Name  : %s\n", name)
 		fmt.Printf("Class : %s\n", agent.CLASS_TEXT[class])
 		fmt.Printf("Weapon: %s\n", agent.WEAPON_TEXT[weapon])
-		fmt.Printf("Go With This Perfect Agent?: (y/n)\n")
+		fmt.Printf("\nGo with this perfect agent?: (y/n)\n")
 		fmt.Print("-> ")
 		yn, _ := reader.ReadString('\n')
 		if yn == "n\n" {
@@ -100,7 +98,7 @@ func (cli *Cli) newAg() {
 
 		fmt.Println("Congratulation, You Made A Wise Choice.")
 		fmt.Println("Type `myag` To Greet Your Agent.")
-		break
+		return
 		/*
 			if strings.Compare("hi", text) == 0 {
 				fmt.Println("hello, Yourself")

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	log "github.com/corgi-kx/logcustom"
+	"github.com/ntswamp/proof-of-kill/agent"
 )
 
 type Cli struct {
@@ -17,8 +18,8 @@ func printUsage() {
 	fmt.Println("----------------------------------------------------------------------------- ")
 	fmt.Println("Usage:")
 	fmt.Println("\thelp                                              check help message")
-	fmt.Println("\tnewag                                             (re)create an mining agent")
 	fmt.Println("\tmyag                                              check current agent")
+	fmt.Println("\tremoveag                                          remove the current agent")
 	fmt.Println("\tgenesis  -a DATA  -v DATA                         make genesis block")
 	fmt.Println("\tsetmineaddr -a DATA                               set the address for mining")
 	fmt.Println("\tnewwal                                            make a new wallet")
@@ -37,6 +38,10 @@ func New() *Cli {
 }
 
 func (cli *Cli) Run() {
+	//create an agent if no existing one found
+	if !agent.IsAgentExist() {
+		cli.newAg()
+	}
 	printUsage()
 	go cli.startNode()
 	cli.ReceiveCMD()
@@ -46,7 +51,7 @@ func (cli *Cli) Run() {
 func (cli Cli) ReceiveCMD() {
 	stdReader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print("> ")
+		fmt.Print("-> ")
 		sendData, err := stdReader.ReadString('\n')
 		if err != nil {
 			fmt.Println("Error Reading From Stdin")
@@ -71,8 +76,8 @@ func (cli Cli) userCmdHandle(data string) {
 	switch cmd {
 	case "help":
 		printUsage()
-	case "newag":
-		cli.newAg()
+	case "removeag":
+		cli.removeAg()
 	case "myag":
 		cli.myAg()
 	case "genesis":
