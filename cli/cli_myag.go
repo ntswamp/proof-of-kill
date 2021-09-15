@@ -10,6 +10,7 @@ func (cli *Cli) myAg() {
 	if agent.IsAgentExist() {
 		a := agent.Load()
 		a.Introduce()
+	} else {
+		fmt.Println("agent not found.")
 	}
-	fmt.Println("Agent Not Found.")
 }

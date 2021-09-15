@@ -3,6 +3,7 @@ package agent
 import (
 	"bytes"
 	"encoding/gob"
+	"fmt"
 
 	log "github.com/corgi-kx/logcustom"
 	"github.com/ntswamp/proof-of-kill/database"
@@ -117,7 +118,7 @@ func IsAgentExist() bool {
 }
 
 func (a *Agent) Introduce() {
-	log.Infof("Introduce Agent: %v, the %v wielding a %v.\n", a.Name, a.Class, a.Weapon)
+	fmt.Printf("greeting to %v: the great %v wielding with %v.\n", a.Name, a.Class, a.Weapon)
 }
 
 func (a *Agent) serliazle() []byte {

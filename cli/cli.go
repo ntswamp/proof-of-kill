@@ -19,7 +19,7 @@ func printUsage() {
 	fmt.Println("Usage:")
 	fmt.Println("\thelp                                              check help message")
 	fmt.Println("\tmyag                                              check current agent")
-	fmt.Println("\tremoveag                                          remove the current agent")
+	fmt.Println("\tremoveag                                          remove the current agent permanently")
 	fmt.Println("\tgenesis  -a DATA  -v DATA                         make genesis block")
 	fmt.Println("\tsetmineaddr -a DATA                               set the address for mining")
 	fmt.Println("\tnewwal                                            make a new wallet")
