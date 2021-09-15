@@ -79,9 +79,9 @@ transaction has been broadcast.
 
 **7.Checking Balance**
 
-Node 1 got 100 coins at the beginning, but after transferrd 60 to Node 2 and Node 3, only 40 coins left for Node 1 now.
-Node 2 received 30 from Node 1.
-Node 3 received 30 from Node 1, and mined the block. therefore Node 3 received 10 coins as reward. It holds 40 coins.
+Node 1 got 100 coins at the beginning, but after transferrd 60 to Node 2 and Node 3, only 40 coins left for Node 1 now.<br>
+Node 2 received 30 from Node 1.<br>
+Node 3 received 30 from Node 1, and mined the block. therefore Node 3 received 10 coins as reward. It holds 40 coins.<br>
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118153547470.png)type `bal` checking balance at 3 addresses
 ```
