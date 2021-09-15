@@ -34,7 +34,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 	var nonce int64 = 0
 	var hashByte [32]byte
 	var hashInt big.Int
-	log.Info("准备挖矿...")
+	log.Info("Start Mining...")
 	//开启一个计数器,每隔五秒打印一下当前挖矿,用来直观展现挖矿情况
 	times := 0
 	ticker1 := time.NewTicker(5 * time.Second)
@@ -42,7 +42,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 		for {
 			<-t.C
 			times += 5
-			log.Infof("正在挖矿,挖矿区块高度为%d,已经运行%ds,nonce值:%d,当前hash:%x", p.Height, times, nonce, hashByte)
+			log.Infof("Mining on Height:%d,Had been running for %ds, Nonce:%d, Current Hash:%x", p.Height, times, nonce, hashByte)
 		}
 	}(ticker1)
 	for nonce < maxInt {
@@ -50,7 +50,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 		if p.Height <= NewestBlockHeight {
 			//结束计数器
 			ticker1.Stop()
-			return 0, nil, errors.New("检测到当前节点已接收到最新区块，所以终止此块的挖矿操作")
+			return 0, nil, errors.New("***STOP MINING***current node received the latest block")
 		}
 		data := p.jointData(nonce)
 		hashByte = sha256.Sum256(data)
@@ -71,7 +71,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 	}
 	//结束计数器
 	ticker1.Stop()
-	log.Infof("本节点已成功挖到区块!!!,高度为:%d,nonce值为:%d,区块hash为: %x", p.Height, nonce, hashByte)
+	log.Infof("***AGENT MINED A BLOCK***HEIGHT:%d, NONCE:%d, BLOCK HASH: %x", p.Height, nonce, hashByte)
 	return nonce, hashByte[:], nil
 }
 

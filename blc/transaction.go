@@ -16,7 +16,7 @@ type Transaction struct {
 	TxHash []byte
 	Vint   []TXInput
 	Vout   []TXOutput
-	Agent  *agent.Agent
+	Agent  agent.Agent
 }
 
 //对此笔交易的输入,输出进行hash运算后存入交易hash(txhash)

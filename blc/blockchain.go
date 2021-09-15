@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/ntswamp/proof-of-kill/agent"
 	"github.com/ntswamp/proof-of-kill/database"
 
 	log "github.com/corgi-kx/logcustom"
@@ -44,7 +45,7 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	//通过地址获得rip160(sha256(publickey))
 	publicKeyHash := generatePublicKeyHash(genesisKeys.PublicKey)
 	txo := TXOutput{value, publicKeyHash}
-	ts := Transaction{nil, []TXInput{txi}, []TXOutput{txo}}
+	ts := Transaction{nil, []TXInput{txi}, []TXOutput{txo}, *agent.Load()}
 	ts.hash()
 	tss := []Transaction{ts}
 	//开始生成区块链的第一个区块
@@ -83,7 +84,7 @@ func (bc *blockchain) CreataRewardTransaction(address string) Transaction {
 
 	publicKeyHash := getPublicKeyHashFromAddress(address)
 	txo := TXOutput{TokenRewardNum, publicKeyHash}
-	ts := Transaction{nil, nil, []TXOutput{txo}}
+	ts := Transaction{nil, nil, []TXOutput{txo}, *agent.Load()}
 	ts.hash()
 	return ts
 }
@@ -247,7 +248,7 @@ func (bc *blockchain) CreateTransaction(from, to string, amount string, send Sen
 			log.Errorf(" 第%d笔交易%s余额不足", index+1, fromAddress)
 			continue
 		}
-		ts := Transaction{nil, newTXInput, newTXOutput[:]}
+		ts := Transaction{nil, newTXInput, newTXOutput[:], *agent.Load()}
 		ts.hash()
 		tss = append(tss, ts)
 	}
