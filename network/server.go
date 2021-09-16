@@ -63,7 +63,7 @@ func StartNode(clier Clier) {
 	go sendVersionToPeers()
 	//启动程序的命令行输入环境
 	go clier.ReceiveCMD()
-	fmt.Println("Local Node Established. Check With Command: 'tail -f log<your port>.txt'")
+	fmt.Println("local node established. check out by command: 'tail -f log<your port>.txt'")
 	signalHandle()
 }
 
@@ -83,14 +83,14 @@ func monitorP2PNodes() {
 	for {
 		peerPoolNum := len(peerPool)
 		if peerPoolNum != currentPeerPoolNum && peerPoolNum != 0 {
-			log.Info("----------------------检测到网络中P2P节点变动,当前节点池存在的节点------------------")
+			log.Info("----------------------Network Change Detected. Existing Nodes In Current Node Pool------------------")
 			for _, v := range peerPool {
 				log.Info("|   ", v, "   |")
 			}
 			log.Info("----------------------------------------------------------------------------------")
 			currentPeerPoolNum = peerPoolNum
 		} else if peerPoolNum != currentPeerPoolNum && peerPoolNum == 0 {
-			log.Info("-------------------检测到网络中P2P节点变动,当前网络中已不存在其他P2P节点-------------------------")
+			log.Info("----------------------Network Change Detected. All Nodes Left The Network--------------------------")
 			currentPeerPoolNum = peerPoolNum
 		}
 		time.Sleep(time.Second)

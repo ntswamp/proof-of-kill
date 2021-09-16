@@ -187,7 +187,7 @@ func (bc *blockchain) CreateTransaction(from, to string, amount string, send Sen
 		//获取数据库中的未消费的utxo
 		utxos := u.findUTXOFromAddress(fromAddress)
 		if len(utxos) == 0 {
-			log.Errorf("%s 余额为0,不能进行转帐操作", fromAddress)
+			log.Errorf("%s: no balance to transfer", fromAddress)
 			return
 		}
 		//将utxos添加上未打包进区块的交易信息
@@ -295,7 +295,7 @@ func (bc *blockchain) VerifyTransBalance(tss *[]Transaction) {
 		u := UTXOHandle{bc}
 		utxos := u.findUTXOFromAddress(fromAddress)
 		if len(utxos) == 0 {
-			log.Warnf("%s 余额为0！", fromAddress)
+			log.Warnf("%s: 0 balance", fromAddress)
 			continue
 		}
 		aomunt := 0
@@ -341,7 +341,7 @@ circle:
 			goto circle
 		}
 	}
-	log.Debug("已完成UTXO交易余额验证")
+	log.Debug("UTXO balance verified.")
 }
 
 //设置挖矿奖励地址
@@ -434,7 +434,7 @@ circle:
 			}
 		}
 	}
-	log.Debug("已完成数字签名验证")
+	log.Debug("Signature verified.")
 }
 
 //查找交易id对应的交易信息
@@ -500,7 +500,7 @@ func (bc *blockchain) GetBlockByHash(hash []byte) []byte {
 //传入地址 返回地址余额信息
 func (bc *blockchain) GetBalance(address string) int {
 	if !IsVaildBitcoinAddress(address) {
-		log.Errorf("地址格式不正确：%s\n", address)
+		log.Errorf("Invalid address：%s\n", address)
 		os.Exit(0)
 	}
 	var balance int
@@ -559,37 +559,37 @@ func (bc *blockchain) PrintAllBlockInfo() {
 	for {
 		block := blcIterator.Next()
 		if block == nil {
-			log.Error("还未生成创世区块!")
+			log.Error("Genesis block not found.")
 			return
 		}
 		fmt.Println("========================================================================================================")
-		fmt.Printf("本块hash         %x\n", block.Hash)
-		fmt.Println("  	------------------------------交易数据------------------------------")
+		fmt.Printf("Block Hash         %x\n", block.Hash)
+		fmt.Println("  	------------------------------Transaction Data------------------------------")
 		for _, v := range block.Transactions {
-			fmt.Printf("   	 本次交易id:  %x\n", v.TxHash)
-			fmt.Println("   	  tx_input：")
+			fmt.Printf("        transaction id:  %x\n", v.TxHash)
+			fmt.Println("        tx_input     :")
 			for _, vIn := range v.Vint {
-				fmt.Printf("			交易id:  %x\n", vIn.TxHash)
-				fmt.Printf("			索引:    %d\n", vIn.Index)
-				fmt.Printf("			签名信息:    %x\n", vIn.Signature)
-				fmt.Printf("			公钥:    %x\n", vIn.PublicKey)
-				fmt.Printf("			地址:    %s\n", GetAddressFromPublicKey(vIn.PublicKey))
+				fmt.Printf("		 	 tx id      :  %x\n", vIn.TxHash)
+				fmt.Printf("			 index      :  %d\n", vIn.Index)
+				fmt.Printf("			 signature  :  %x\n", vIn.Signature)
+				fmt.Printf("			 pubkey     :  %x\n", vIn.PublicKey)
+				fmt.Printf("			 address    :  %s\n", GetAddressFromPublicKey(vIn.PublicKey))
 			}
-			fmt.Println("  	  tx_output：")
+			fmt.Println("        tx_output     :")
 			for index, vOut := range v.Vout {
-				fmt.Printf("			金额:    %d    \n", vOut.Value)
-				fmt.Printf("			公钥Hash:    %x    \n", vOut.PublicKeyHash)
-				fmt.Printf("			地址:    %s\n", GetAddressFromPublicKeyHash(vOut.PublicKeyHash))
+				fmt.Printf("			 value      :  %d    \n", vOut.Value)
+				fmt.Printf("			 pubkey hash:  %x    \n", vOut.PublicKeyHash)
+				fmt.Printf("			 address    :  %s\n", GetAddressFromPublicKeyHash(vOut.PublicKeyHash))
 				if len(v.Vout) != 1 && index != len(v.Vout)-1 {
 					fmt.Println("			---------------")
 				}
 			}
 		}
-		fmt.Println("  	--------------------------------------------------------------------")
-		fmt.Printf("时间戳           %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
-		fmt.Printf("区块高度         %d\n", block.Height)
-		fmt.Printf("随机数           %d\n", block.Nonce)
-		fmt.Printf("上一个块hash     %x\n", block.PreHash)
+		fmt.Println("  	----------------------------------------------------------------------------")
+		fmt.Printf("Time Stamp         %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
+		fmt.Printf("block height       %d\n", block.Height)
+		fmt.Printf("nonce              %d\n", block.Nonce)
+		fmt.Printf("previous hash      %x\n", block.PreHash)
 		var hashInt big.Int
 		hashInt.SetBytes(block.PreHash)
 		if big.NewInt(0).Cmp(&hashInt) == 0 {
