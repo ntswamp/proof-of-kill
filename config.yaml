@@ -1,6 +1,6 @@
 blockchain:
   # difficulty
-  mine_difficulty_value: 24
+  mine_difficulty_value: 8
   # mining reward
   token_reward_num: 10
   # start mining when this number is reached

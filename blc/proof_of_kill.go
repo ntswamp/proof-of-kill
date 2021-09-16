@@ -24,7 +24,7 @@ type proofOfKill struct {
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
-	var target uint64 = 100000000
+	var target uint64 = util.Uint64Pow(uint64(10), uint64(TargetBits))
 	var kill uint64 = 0
 	agent := agent.Load()
 	pok := &proofOfKill{block, target, agent, kill}

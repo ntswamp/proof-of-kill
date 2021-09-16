@@ -42,3 +42,14 @@ func RandomInRange(min int, max int) int {
 	}
 	return rand.Intn(max-min+1) + min
 }
+
+func Uint64Pow(n, m uint64) uint64 {
+	if m == 0 {
+		return 1
+	}
+	result := n
+	for i := uint64(2); i <= m; i++ {
+		result *= n
+	}
+	return result
+}
