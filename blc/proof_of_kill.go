@@ -52,7 +52,7 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 		for {
 			<-t.C
 			times += 5
-			log.Infof("Mining on Height:%d, had been running for %ds.\nSeed:%d", p.Height, times, seed)
+			log.Infof("Mining on Height:%d, had been running for %ds.\nCurrent kill:%d, Seed:%d.", p.Height, times, p.Kill, seed)
 		}
 	}(ticker1)
 
