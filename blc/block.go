@@ -3,9 +3,10 @@ package block
 import (
 	"bytes"
 	"encoding/gob"
-	log "github.com/corgi-kx/logcustom"
 	"math/big"
 	"time"
+
+	log "github.com/corgi-kx/logcustom"
 )
 
 type Block struct {
@@ -35,8 +36,8 @@ func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, e
 	}
 	block.Nonce = nonce
 	block.Hash = hash[:]
-	log.Info("pow verify : ", pow.Verify())
-	log.Infof("已生成新的区块,区块高度为%d", block.Height)
+	log.Info("PoK verify : ", pow.Verify())
+	log.Infof("Made a new block, height: %d", block.Height)
 	return &block, nil
 }
 

@@ -14,7 +14,7 @@ type Send struct {
 
 //向网络中其他节点发送本节点退出信号
 func (s Send) SendSignOutToPeers() {
-	ss := "节点:" + localAddr + "已退出网络"
+	ss := "Node:" + localAddr + " goes offline."
 	m := myerror{ss, localAddr}
 	data := jointMessage(cMyError, m.serialize())
 	for _, v := range peerPool {
@@ -29,7 +29,7 @@ func (s Send) SendVersionToPeers(lastHeight int) {
 	for _, v := range peerPool {
 		s.SendMessage(v, data)
 	}
-	log.Trace("version信息发送完毕...")
+	log.Trace("Version message sent.")
 }
 
 //向网络中其他节点发送交易信息
@@ -47,7 +47,7 @@ func (s Send) SendTransToPeers(ts []block.Transaction) {
 	go handleTransaction(tss.Serialize())
 	//然后将命令与交易列表拼接好发送给全网节点
 	data := jointMessage(cTransaction, tss.Serialize())
-	log.Tracef("准备发送%d笔交易到网络中其他P2P节点", len(tss.Ts))
+	log.Tracef("About to broadcast %d transactions to other nodes", len(tss.Ts))
 	for _, v := range peerPool {
 		s.SendMessage(v, data)
 	}
