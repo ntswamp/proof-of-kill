@@ -92,7 +92,7 @@ Check out Node 1's Log by Command:(see mining process in detail.)
 ```shell
  tail -f log6666.txt 
 ```
-![image](https://user-images.githubusercontent.com/50705651/133555552-2ddf5cf4-882d-4a3b-854a-183977fc2113.png)
+![image](https://user-images.githubusercontent.com/50705651/133558037-c9e4f4e2-933d-463f-a0d7-d84a87947e1e.png)
 
 <br>
 
