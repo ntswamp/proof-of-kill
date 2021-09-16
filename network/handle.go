@@ -131,9 +131,10 @@ func handleBlock(content []byte) {
 	block.Deserialize(content)
 	log.Infof("Received a block from another node, Hash of that block：%x", block.Hash)
 	bc := blc.NewBlockchain()
-	pow := blc.NewProofOfWork(block)
+	//consensus := blc.NewProofOfWork(block)
+	consensus := blc.NewProofOfKill(block)
 	//重新计算本块hash,进行pow验证
-	if pow.Verify() {
+	if consensus.Verify() {
 		log.Infof("PoK verified, Block height：%d", block.Height)
 		//如果是创世区块则直接添加进本地库
 		currentHash := bc.GetBlockHashByHeight(block.Height)

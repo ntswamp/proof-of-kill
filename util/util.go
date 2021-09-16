@@ -2,10 +2,11 @@ package util
 
 import (
 	"bytes"
-	"crypto/rand"
+	crypto "crypto/rand"
 	"encoding/binary"
 	"fmt"
 	"math/big"
+	"math/rand"
 )
 
 //int64转换成字节数组
@@ -25,9 +26,19 @@ func BytesToInt(bys []byte) int {
 
 //生成随机数
 func GenerateRealRandom() int64 {
-	n, err := rand.Int(rand.Reader, big.NewInt(1000000000000000000))
+	n, err := crypto.Int(crypto.Reader, big.NewInt(1000000000000000000))
 	if err != nil {
 		fmt.Println(err)
 	}
 	return n.Int64()
+}
+
+func RandomInRange(min int, max int) int {
+	var tmp int
+	if max < min {
+		tmp = max
+		max = min
+		min = tmp
+	}
+	return rand.Intn(max-min+1) + min
 }

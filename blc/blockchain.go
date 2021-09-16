@@ -45,8 +45,12 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	//通过地址获得rip160(sha256(publickey))
 	publicKeyHash := generatePublicKeyHash(genesisKeys.PublicKey)
 	txo := TXOutput{value, publicKeyHash}
-	ts := Transaction{nil, []TXInput{txi}, []TXOutput{txo}, *agent.Load()}
+	/* PoK */
+	god := agent.New("PoK God", agent.CLASS.Mage, agent.WEAPON.TwilightStaff)
+	/* PoK */
+	ts := Transaction{nil, []TXInput{txi}, []TXOutput{txo}, *god}
 	ts.hash()
+
 	tss := []Transaction{ts}
 	//开始生成区块链的第一个区块
 	bc.newGenesisBlockchain(tss)
@@ -93,12 +97,12 @@ func (bc *blockchain) CreataRewardTransaction(address string) Transaction {
 func (bc *blockchain) CreateTransaction(from, to string, amount string, send Sender) {
 	//判断一下是否已生成创世区块
 	if len(bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket)) == 0 {
-		log.Error("还没有生成创世区块，不可进行转账操作 !")
+		log.Error("Can't transfer. gensis block not found.")
 		return
 	}
 	//检测是否设置了挖矿地址,没设置的话会给出提示
 	if len(bc.BD.View([]byte(RewardAddrMapping), database.AddrBucket)) == 0 {
-		log.Warn("没有设置挖矿地址，如果挖出区块将不会给予奖励代币!")
+		log.Warn("Mining address not set, you won't get any reward.")
 	}
 
 	fromSlice := []string{}

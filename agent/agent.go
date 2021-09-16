@@ -138,3 +138,23 @@ func (a *Agent) deserialize(b []byte) {
 		log.Panic(err)
 	}
 }
+
+/**
+*
+*   for duel
+*
+**/
+
+//deal a.Attak + rand damage
+func (a *Agent) DealDamage(rand int) int {
+	damage := a.Attack + rand
+	return damage
+}
+
+func (a *Agent) TakeDamage(damage int) {
+	a.Health = a.Health - damage
+}
+
+func (a *Agent) IsDied() bool {
+	return a.Health <= 0
+}

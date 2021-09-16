@@ -24,6 +24,39 @@ type Block struct {
 	Hash []byte
 }
 
+//生成创世区块
+func newGenesisBlock(transaction []Transaction) *Block {
+	//创世区块的上一个块hash默认设置成下面的样子
+	preHash := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	//生成创世区块
+	genesisBlock, err := mineBlock(transaction, preHash, 1)
+	if err != nil {
+		log.Error(err)
+	}
+	return genesisBlock
+}
+
+//PoK
+//进行挖矿来生成区块
+func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, error) {
+	timeStamp := time.Now().Unix()
+	//hash数据+时间戳+上一个区块hash
+	block := Block{preHash, transaction, timeStamp, height, 0, nil}
+	pok := NewProofOfKill(&block)
+	nonce, hash, err := pok.run()
+	if err != nil {
+		return nil, err
+	}
+	block.Nonce = nonce
+	block.Hash = hash[:]
+	log.Info("PoK verify : ", pok.Verify())
+	log.Infof("Made a new block, height: %d", block.Height)
+	return &block, nil
+}
+
+/**
+* PoW
+*
 //进行挖矿来生成区块
 func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, error) {
 	timeStamp := time.Now().Unix()
@@ -41,17 +74,7 @@ func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, e
 	return &block, nil
 }
 
-//生成创世区块
-func newGenesisBlock(transaction []Transaction) *Block {
-	//创世区块的上一个块hash默认设置成下面的样子
-	preHash := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	//生成创世区块
-	genesisBlock, err := mineBlock(transaction, preHash, 1)
-	if err != nil {
-		log.Error(err)
-	}
-	return genesisBlock
-}
+*/
 
 // 将Block对象序列化成[]byte
 func (b *Block) Serialize() []byte {
