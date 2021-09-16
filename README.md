@@ -92,7 +92,7 @@ Check out Node 1's Log by Command:(see mining process in detail.)
 ```shell
  tail -f log9000.txt 
 ```
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118144251486.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1OTExMTg0,size_16,color_FFFFFF,t_70)
+![image](https://user-images.githubusercontent.com/50705651/133555552-2ddf5cf4-882d-4a3b-854a-183977fc2113.png)
 
 <br>
 
