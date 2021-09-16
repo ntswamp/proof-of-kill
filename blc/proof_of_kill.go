@@ -39,7 +39,7 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 
 	//initialize random seed
 	//genesis block
-	seed := time.Now().UnixNano()
+	var seed int64 = 20210917004703
 	if p.Height != 1 {
 		seed = int64(p.generateSeedByHash())
 	}
