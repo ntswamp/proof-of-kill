@@ -22,7 +22,7 @@ You want to simulate multiple nodes of a P2P network by openning multiple termin
 If you are using VScode, this goal can be easily achieved tapping `Split Terminal` button in the upper right-hand corner of default terminal window.
 >If nodes can't find each other, turn off firewall and try again.
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118103707708.png)
+![Screenshot 2021-09-16 113610](https://user-images.githubusercontent.com/50705651/133540241-1bf10cb4-11fd-4457-aa42-92e427ada100.jpg)
 
 <br>
 
