@@ -42,7 +42,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 		for {
 			<-t.C
 			times += 5
-			log.Infof("Mining on Height:%d,Had been running for %ds, Nonce:%d, Current Hash:%x", p.Height, times, nonce, hashByte)
+			log.Infof("Mining on Height:%d, had been running for %ds.\nNonce:%d, Current Hash:%x", p.Height, times, nonce, hashByte)
 		}
 	}(ticker1)
 	for nonce < maxInt {

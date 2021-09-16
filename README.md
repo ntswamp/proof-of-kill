@@ -26,7 +26,7 @@ If you are using VScode, this goal can be easily achieved tapping `Split Termina
 
 <br>
 
-**Play With Configuration File**
+**Play with Configuration File**
   
   The key field is `listen_port`, an unique ports stands for an unique node in a simulated P2P network.</br>
   You can leave other parts default. but don't set `mine_difficulty_value` lower than 24, otherwise you won't see the mining process show up in the log when it done too fast.
