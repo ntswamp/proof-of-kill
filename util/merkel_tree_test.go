@@ -3,8 +3,9 @@ package util
 import (
 	"bytes"
 	"fmt"
-	"github.com/cloudflare/cfssl/scan/crypto/sha256"
 	"testing"
+
+	"github.com/cloudflare/cfssl/scan/crypto/sha256"
 )
 
 func TestGetNewMerkelTree(t *testing.T) {
@@ -38,7 +39,7 @@ func TestFindMerkelNode(t *testing.T) {
 	if mn == nil {
 		fmt.Printf("没有找到\n")
 	} else {
-		fmt.Printf("找到了，hash为:%x\n", mn.Data)
+		fmt.Printf("找到了, hash为:%x\n", mn.Data)
 	}
 }
 

@@ -50,7 +50,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 		if p.Height <= NewestBlockHeight {
 			//结束计数器
 			ticker1.Stop()
-			return 0, nil, errors.New("***STOP MINING***current node received the latest block")
+			return 0, nil, errors.New("***MINING STOPPED***Received the Latest Block")
 		}
 		data := p.jointData(nonce)
 		hashByte = sha256.Sum256(data)
@@ -64,14 +64,14 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 			//nonce++
 			bigInt, err := rand.Int(rand.Reader, big.NewInt(math.MaxInt64))
 			if err != nil {
-				log.Panic("随机数错误:", err)
+				log.Panic("rand:", err)
 			}
 			nonce = bigInt.Int64()
 		}
 	}
 	//结束计数器
 	ticker1.Stop()
-	log.Infof("***AGENT MINED A BLOCK***HEIGHT:%d, NONCE:%d, BLOCK HASH: %x", p.Height, nonce, hashByte)
+	log.Infof("***AGENT MINED A BLOCK***HEIGHT:%d, NONCE:%d, HASH: %x", p.Height, nonce, hashByte)
 	return nonce, hashByte[:], nil
 }
 

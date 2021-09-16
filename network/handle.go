@@ -3,10 +3,11 @@ package network
 import (
 	"bytes"
 	"fmt"
-	blc "github.com/ntswamp/proof-of-kill/blc"
 	"io/ioutil"
 	"sync"
 	"time"
+
+	blc "github.com/ntswamp/proof-of-kill/blc"
 
 	log "github.com/corgi-kx/logcustom"
 	"github.com/libp2p/go-libp2p-core/network"
@@ -20,7 +21,7 @@ func handleStream(stream network.Stream) {
 	}
 	//取信息的前十二位得到命令
 	cmd, content := splitMessage(data)
-	log.Tracef("本节点已接收到命令：%s", cmd)
+	log.Tracef("Request received：%s", cmd)
 	switch command(cmd) {
 	case cVersion:
 		go handleVersion(content)
@@ -91,7 +92,7 @@ func mineBlock(t Transactions) {
 	for {
 		//满足交易池规定的大小后进行挖矿
 		if len(tradePool.Ts) >= TradePoolLength {
-			log.Debugf("交易池已满足挖矿交易数量大小限制:%d,即将进行挖矿", TradePoolLength)
+			log.Debugf("Trade pool is full now:%d, ready to mine.", TradePoolLength)
 			mineTrans := Transactions{make([]Transaction, TradePoolLength)}
 			copy(mineTrans.Ts, tradePool.Ts[:TradePoolLength])
 
@@ -118,7 +119,7 @@ func mineBlock(t Transactions) {
 			newTrans = append(newTrans, tradePool.Ts[TradePoolLength:]...)
 			tradePool.Ts = newTrans
 		} else {
-			log.Infof("当前交易池数量:%d，交易池未满%d，暂不进行挖矿操作", len(tradePool.Ts), TradePoolLength)
+			log.Infof("Transaction collected: %d，Pool size: %d，waiting for more to come", len(tradePool.Ts), TradePoolLength)
 			break
 		}
 	}
@@ -128,19 +129,19 @@ func mineBlock(t Transactions) {
 func handleBlock(content []byte) {
 	block := &blc.Block{}
 	block.Deserialize(content)
-	log.Infof("本节点已接收到来自其他节点的区块数据，该块hash为：%x", block.Hash)
+	log.Infof("Received a block from another node, Hash of that block：%x", block.Hash)
 	bc := blc.NewBlockchain()
 	pow := blc.NewProofOfWork(block)
 	//重新计算本块hash,进行pow验证
 	if pow.Verify() {
-		log.Infof("POW验证通过,该区块高度为：%d", block.Height)
+		log.Infof("PoK verified, Block height：%d", block.Height)
 		//如果是创世区块则直接添加进本地库
 		currentHash := bc.GetBlockHashByHeight(block.Height)
 		if block.Height == 1 && currentHash == nil {
 			bc.AddBlock(block)
 			utxos := blc.UTXOHandle{bc}
 			utxos.ResetUTXODataBase() //重置utxo数据库
-			log.Info("创世区块验证通过,已存入本地数据库...")
+			log.Info("Genesis block verified, updated local chain.")
 		}
 		//验证上一个区块的hash与本块中prehash是否一致
 		lastBlockHash := bc.GetBlockHashByHeight(block.Height - 1)
@@ -150,7 +151,7 @@ func handleBlock(content []byte) {
 				time.Sleep(time.Second)
 				lastBlockHash = bc.GetBlockHashByHeight(block.Height - 1)
 				if lastBlockHash != nil {
-					log.Debugf("区块高度%d尚未同步,等待同步...", block.Height-1)
+					log.Debugf("Block of height %d not found, try to resynchronize...", block.Height-1)
 					break
 				}
 			}
@@ -161,8 +162,8 @@ func handleBlock(content []byte) {
 			utxos := blc.UTXOHandle{bc}
 			//重置utxo数据库
 			utxos.ResetUTXODataBase()
-			log.Infof("prehash验证通过,该区块高度为:%d,", block.Height)
-			log.Infof("总验证通过已存入本地库,区块高度%d,哈希%x", block.Height, block.Hash)
+			log.Infof("Prehash verified, block height:%d,", block.Height)
+			log.Infof("Received block has passed validation, local chain updated:\nBlock height: %d,\nHash: %x", block.Height, block.Hash)
 		} else {
 			log.Infof("上一个块高度为%d的hash值为:%x,与本块中的prehash值:%x不一致,固不存入区块链中", block.Height-1, lastBlockHash, block.Hash)
 		}
@@ -178,7 +179,7 @@ func handleGetBlock(content []byte) {
 	bc := blc.NewBlockchain()
 	blockBytes := bc.GetBlockByHash(g.BlockHash)
 	data := jointMessage(cBlock, blockBytes)
-	log.Debugf("本节点已将区块数据发送到%s，该块hash为%x", g.AddrFrom, g.BlockHash)
+	log.Debugf("Sent requested block to %s, Block Hash: %x", g.AddrFrom, g.BlockHash)
 	send.SendMessage(buildPeerInfoByAddr(g.AddrFrom), data)
 }
 
@@ -198,7 +199,7 @@ func handleHashMap(content []byte) {
 		g := getBlock{hash, localAddr}
 		data := jointMessage(cGetBlock, g.serialize())
 		send.SendMessage(buildPeerInfoByAddr(h.AddrFrom), data)
-		log.Debugf("已发送获取区块信息命令,目标高度为：%d", targetHeight)
+		log.Debugf("Requsting block... target height：%d", targetHeight)
 		targetHeight++
 	}
 }
@@ -216,7 +217,7 @@ func handleGetHash(content []byte) {
 	h := hash{hm, localAddr}
 	data := jointMessage(cHashMap, h.serialize())
 	send.SendMessage(buildPeerInfoByAddr(g.AddrFrom), data)
-	log.Debug("已发送获取hash列表命令")
+	log.Debug("Sent requested hashes.")
 }
 
 //接收到其他节点的区块高度信息,与本地区块高度进行对比
@@ -228,11 +229,11 @@ func handleVersion(content []byte) {
 	v.deserialize(content)
 	bc := blc.NewBlockchain()
 	if blc.NewestBlockHeight > v.Height {
-		log.Info("目标高度比本链小，准备向目标发送版本信息")
+		log.Info("Other nodes have a smaller height,sending version messages to update them...")
 		for {
 			currentHeight := bc.GetLastBlockHeight()
 			if currentHeight < blc.NewestBlockHeight {
-				log.Info("当前正在更新区块信息,稍后将发送版本信息...")
+				log.Info("Updating blocks data, about to send the version message.")
 				time.Sleep(time.Second)
 			} else {
 				newV := version{versionInfo, currentHeight, localAddr}
@@ -242,12 +243,12 @@ func handleVersion(content []byte) {
 			}
 		}
 	} else if blc.NewestBlockHeight < v.Height {
-		log.Debugf("对方版本比咱们大%v,发送获取区块的hash信息！", v)
+		log.Debugf("Other nodes have the newer version:%v,requesting hash of new blocks...", v)
 		gh := getHash{blc.NewestBlockHeight, localAddr}
 		blc.NewestBlockHeight = v.Height
 		data := jointMessage(cGetHash, gh.serialize())
 		send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 	} else {
-		log.Debug("接收到版本信息，双方高度一致，无需处理！")
+		log.Debug("Our node keeps the same height as others, nothing to update.")
 	}
 }
