@@ -11,7 +11,7 @@ https://golang.org/doc/install
 
 
 ```shell
- go build -o app main.go
+ go build -o app
 ```
 <br>
 
