@@ -20,7 +20,7 @@ func printUsage() {
 	fmt.Println("\thelp                                           check help message")
 	fmt.Println("\tmyag                                           check current agent")
 	fmt.Println("\tremoveag                                       remove the current agent permanently")
-	fmt.Println("\tgenesis -a <address> -v <amount>               make genesis block with money funded")
+	fmt.Println("\tgen -a <address> -v <amount>                   make genesis block with money funded")
 	fmt.Println("\tsetmineaddr -a <address>                       set the address for mining")
 	fmt.Println("\tnewwal                                         make a new wallet")
 	fmt.Println("\timportwal -m <mnemonic word>                   import wallets by mnemonics")
@@ -80,7 +80,7 @@ func (cli Cli) userCmdHandle(data string) {
 		cli.removeAg()
 	case "myag":
 		cli.myAg()
-	case "genesis":
+	case "gen":
 		address := getSpecifiedContent(data, "-a", "-v")
 		value := getSpecifiedContent(data, "-v", "")
 		v, err := strconv.Atoi(value)

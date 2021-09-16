@@ -84,7 +84,7 @@ Address      ： 1EVrFBakJnhaWAvHQNhCJKLzensYqtJxR5
 
 Generate the Genesis Block(fund 1st address 100 coins)
 ```
--> genesis -a 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd -v 100
+-> gen -a 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd -v 100
 Made Genesis Block.
 ```
 
