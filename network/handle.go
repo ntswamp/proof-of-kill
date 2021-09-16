@@ -169,7 +169,7 @@ func handleBlock(content []byte) {
 			log.Infof("上一个块高度为%d的hash值为:%x,与本块中的prehash值:%x不一致,固不存入区块链中", block.Height-1, lastBlockHash, block.Hash)
 		}
 	} else {
-		log.Errorf("POW验证不通过，无法将此块：%x加入数据库", block.Hash)
+		log.Errorf("Failed PoK verification. block[%x] can't be added to local chain\nkill:%d, target:%d", block.Hash, consensus.Kill, consensus.Target)
 	}
 }
 

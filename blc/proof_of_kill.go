@@ -19,7 +19,7 @@ type proofOfKill struct {
 	Target uint64
 	agent  *agent.Agent
 	//current kills
-	kill uint64
+	Kill uint64
 }
 
 //return PoK instance
@@ -69,10 +69,10 @@ OUTER:
 			myRandom := util.RandomInRange(0, p.agent.Luck)
 			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
 			if p.isKilledOpponent(&tx.Agent, myRandom, enemyRandom) {
-				p.kill = p.kill + 1
+				p.Kill = p.Kill + 1
 			}
 
-			if p.kill >= p.Target {
+			if p.Kill >= p.Target {
 				break OUTER
 			}
 		}
@@ -86,7 +86,7 @@ OUTER:
 
 //检验区块是否有效
 func (p *proofOfKill) Verify() bool {
-	return p.kill == p.Target
+	return p.Kill == p.Target
 }
 
 //将上一区块hash、数据、时间戳、难度位数、随机数 拼接成字节数组
