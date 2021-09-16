@@ -83,14 +83,14 @@ func monitorP2PNodes() {
 	for {
 		peerPoolNum := len(peerPool)
 		if peerPoolNum != currentPeerPoolNum && peerPoolNum != 0 {
-			log.Info("----------------------Network Change Detected. Existing Nodes In Current Node Pool------------------")
+			log.Info("-----------Network Change Detected. Existing Nodes In Current Node Pool----------")
 			for _, v := range peerPool {
 				log.Info("|   ", v, "   |")
 			}
 			log.Info("----------------------------------------------------------------------------------")
 			currentPeerPoolNum = peerPoolNum
 		} else if peerPoolNum != currentPeerPoolNum && peerPoolNum == 0 {
-			log.Info("----------------------Network Change Detected. All Nodes Left The Network--------------------------")
+			log.Info("-------------Network Change Detected. All Nodes Left The Network------------------")
 			currentPeerPoolNum = peerPoolNum
 		}
 		time.Sleep(time.Second)
