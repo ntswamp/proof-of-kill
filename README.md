@@ -92,7 +92,7 @@ Check out Node 1's Log by Command:(see mining process in detail.)
 ```shell
  tail -f log6666.txt 
 ```
-![image](https://user-images.githubusercontent.com/50705651/133555552-2ddf5cf4-882d-4a3b-854a-183977fc2113.png)
+![image](https://user-images.githubusercontent.com/50705651/133558037-c9e4f4e2-933d-463f-a0d7-d84a87947e1e.png)
 
 <br>
 
@@ -100,7 +100,7 @@ Check out Node 1's Log by Command:(see mining process in detail.)
 
 Launch Node 2, Node 3 with #listen_port# field in the config.yaml set up to 6667,6668.</br>
 Look closer to Node 1's log you will notice that other nodes are detected.
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118145703154.png)Node 2, Node 3 will synchronize local chain with Node 1 automatically once they get fully launched.
+![image](https://user-images.githubusercontent.com/50705651/133558870-490772fe-b1a9-4440-8369-07ad64a3d4d3.png)Node 2, Node 3 will synchronize local chain with Node 1 automatically once they get fully launched.
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191118145752942.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1OTExMTg0,size_16,color_FFFFFF,t_70)
 
 <br>
