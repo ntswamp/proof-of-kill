@@ -22,6 +22,8 @@ type Block struct {
 	Nonce int64
 	//本区块hash
 	Hash []byte
+	//for verification
+	//Blood string
 }
 
 //生成创世区块
