@@ -88,7 +88,7 @@ Generate the Genesis Block(fund 1st address 100 coins)
 Made Genesis Block.
 ```
 
-Check out Node 1's Log by Command:(see mining process in detail.)
+Open another terminal, Check out Node 1's log by command:(see mining process in detail.)
 ```shell
  tail -f log6666.txt 
 ```
