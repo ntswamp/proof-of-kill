@@ -19,8 +19,8 @@ https://golang.org/doc/install
 **Prepare Multiple Terminals**
 
 You want to simulate multiple nodes of a P2P network by openning multiple terminal windows.
-If you are using VScode, this goal can be easily achieved tapping `Split Terminal` button in the upper right-hand corner of default terminal window.
->If nodes can't find each other, turn off firewall and try again.
+If you are using VScode, this goal can be easily achieved tapping `Split Terminal` button in the upper right-hand corner of the default terminal window.
+>If nodes can't find each other, turn off firewall and retry.
 
 ![Screenshot 2021-09-16 113610](https://user-images.githubusercontent.com/50705651/133540241-1bf10cb4-11fd-4457-aa42-92e427ada100.jpg)
 
@@ -28,15 +28,15 @@ If you are using VScode, this goal can be easily achieved tapping `Split Termina
 
 **Play with Configuration File**
   
-  The key field is `listen_port`, an unique ports stands for an unique node in a simulated P2P network.</br>
-  You can leave other parts default. but don't set `mine_difficulty_value` lower than 24, otherwise you won't see the mining process show up in the log when it done too fast.
+  The key field in the configuration file is `listen_port`, a unique ports stands for a unique node in our simulated P2P network.</br>
+  You can leave other parts default. but don't set `mine_difficulty_value` lower than 8, otherwise you won't see the mining details show up in the log when it done too fast.
 ```shell
  vim config.yaml
 ```
 ```yaml
 blockchain:
   # difficulty
-  mine_difficulty_value: 24
+  mine_difficulty_value: 9
   # mining reward
   token_reward_num: 10
   # start mining when this number is reached
@@ -59,7 +59,7 @@ network:
 
 <br>
 
-**Launch the Node, Create Wallets, Generate a Genesis Block**
+**Launch the Node, Create Wallets, Generate the Genesis Block**
 
 Launch Node 1
 ```shell
