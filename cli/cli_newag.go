@@ -30,7 +30,7 @@ func (cli *Cli) newAg() {
 		// convert CRLF to LF
 		name = strings.Replace(name, "\n", "", -1)
 
-		fmt.Printf("\n%s may help you surviving the night.\n\n", name)
+		fmt.Printf("\n%s may help you surviving the night.\n", name)
 
 		fmt.Println("Tell me his class, by a number:")
 		fmt.Println("#1 Warrior")
