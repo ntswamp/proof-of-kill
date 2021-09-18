@@ -270,7 +270,34 @@ func handleVersion(content []byte) {
 		data := jointMessage(cGetHash, gh.serialize())
 		send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 	} else {
-		if
-		log.Debug("Our node keeps the same height as others, nothing to update.")
+		log.Debug("Our node keeps the same height as others, comparing kills.")
+		if blc.NEWEST_BLOCK_KILL > v.Kill {
+			log.Info("Other nodes have smaller kills,sending version messages to update them...")
+			for {
+				lastKill := bc.GetLastBlockKill()
+				if lastKill < blc.NEWEST_BLOCK_KILL {
+					log.Info("Updating local data to the latest before sending...")
+					time.Sleep(time.Second)
+				} else {
+					blockByte := bc.GetBlockByHash(bc.GetBlockHashByHeight(v.Height))
+					localLatestBlock := blc.Block{}
+					localLatestBlock.Deserialize(blockByte)
+					newV := version{versionInfo, localAddr, v.Height, localLatestBlock.Kill}
+					data := jointMessage(cVersion, newV.serialize())
+					send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
+					break
+				}
+			}
+
+		} else if blc.NEWEST_BLOCK_KILL < v.Kill {
+			log.Debugf("Other nodes kill more:%v,requesting hash of new blocks...", v)
+			gh := getHash{blc.NEWEST_BLOCK_HEIGHT, localAddr}
+			blc.NEWEST_BLOCK_HEIGHT = v.Height
+			blc.NEWEST_BLOCK_KILL = v.Kill
+			data := jointMessage(cGetHash, gh.serialize())
+			send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
+		} else {
+			log.Debug("Our node keeps the same version as others, nothing to update.")
+		}
 	}
 }
