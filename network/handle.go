@@ -126,7 +126,7 @@ func mineBlock(t Transactions) {
 }
 
 //接收到区块数据,进行验证后加入数据库
-//Controlling forking strategy by this function.
+//Controlling forking by this function.
 func handleBlock(content []byte) {
 	block := &blc.Block{}
 	block.Deserialize(content)
@@ -161,6 +161,7 @@ func handleBlock(content []byte) {
 		//验证上一个区块的hash与本块中prehash是否一致, 如果上一块的hash等于本块prehash则通过存入本地库
 		if bytes.Equal(localPreviousBlockHash, block.PreHash) {
 			localSameHeightBlockHash := bc.GetBlockHashByHeight(block.Height)
+			//same height block in local chain already exists
 			if localSameHeightBlockHash != nil {
 				blockByte := bc.GetBlockByHash(localSameHeightBlockHash)
 				localSameHeightBlock := blc.Block{}
@@ -169,6 +170,7 @@ func handleBlock(content []byte) {
 					log.Infof("Local block killed faster, local attempt: %d, incoming block attempt: %d.", localSameHeightBlock.Attempt, block.Attempt)
 					return
 				}
+				log.Infof("Incoming Block killed faster(attempt:%d), replace local slow block(attempt:%d) with it.", block.Attempt, localSameHeightBlock.Attempt)
 			}
 			bc.AddBlock(block)
 			utxos := blc.UTXOHandle{bc}
