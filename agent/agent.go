@@ -88,7 +88,7 @@ func (a *Agent) Save() {
 		log.Warn("Agent Already Exists.")
 		return
 	}
-	db.Put([]byte("MYAGENT"), a.serliazle(), database.AgentBucket)
+	db.Put([]byte("MYAGENT"), a.Serliazle(), database.AgentBucket)
 
 }
 
@@ -100,7 +100,7 @@ func Load() *Agent {
 		return nil
 	}
 	a := &Agent{}
-	a.deserialize(b)
+	a.Deserialize(b)
 	return a
 
 }
@@ -120,7 +120,7 @@ func (a *Agent) Introduce() {
 	fmt.Printf("greeting to %v: the great %v wielding with %v.\n", a.Name, a.Class, a.Weapon)
 }
 
-func (a *Agent) serliazle() []byte {
+func (a *Agent) Serliazle() []byte {
 	var result bytes.Buffer
 	encoder := gob.NewEncoder(&result)
 	err := encoder.Encode(a)
@@ -130,7 +130,7 @@ func (a *Agent) serliazle() []byte {
 	return result.Bytes()
 }
 
-func (a *Agent) deserialize(b []byte) {
+func (a *Agent) Deserialize(b []byte) {
 	decoder := gob.NewDecoder(bytes.NewReader(b))
 	err := decoder.Decode(a)
 	if err != nil {

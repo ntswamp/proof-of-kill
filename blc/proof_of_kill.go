@@ -16,21 +16,20 @@ import (
 type proofOfKill struct {
 	*Block
 	//target kills need to be reached
-	Target       uint64
+	Round        uint64
 	verifyAmount uint64
 }
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
-	var target uint64 = util.Uint64Pow(2, TARGET_BIT)
+	var round uint64 = util.Uint64Pow(2, ROUND_BIT)
 	verifyAmount := util.Uint64Pow(2, VERIFY_BIT)
-	pok := &proofOfKill{block, target, verifyAmount}
+	pok := &proofOfKill{block, round, verifyAmount}
 	return pok
 }
 
 //进行hash运算,获取到当前区块的hash值
-func (p *proofOfKill) run() (int64, []byte, error) {
-	var nonce int64 = 0
+func (p *proofOfKill) run() ([]byte, error) {
 	var hashByte [32]byte
 	log.Info("Start Mining...")
 
@@ -53,14 +52,14 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 		}
 	}(ticker1)
 
-OUTER:
-	for {
+	var round uint64 = 0
+	for round < p.Round {
 		for _, tx := range p.Transactions {
 			//other nodes mined a block already?
 			if p.Height <= NEWEST_BLOCK_HEIGHT {
 				//stop ticker
 				ticker1.Stop()
-				return 0, nil, errors.New("***MINING STOPPED***Received The Latest Block Already")
+				return nil, errors.New("***MINING STOPPED***Received The Latest Block From Another Node")
 			}
 			//generate random part of damage
 			myRandom := util.RandomInRange(0, p.Agent.Luck)
@@ -69,17 +68,15 @@ OUTER:
 			duelResult := p.isKilledOpponent(&tx.Agent, myRandom, enemyRandom)
 			if duelResult {
 				p.Kill = p.Kill + 1
+			} else {
+				//death punishment
+				time.Sleep(time.Millisecond * DEATH_PUNISHMENT)
 			}
-			//a duel is done.
-			p.Attempt = p.Attempt + 1
-
-			if p.Attempt < p.verifyAmount {
+			if round < p.verifyAmount {
 				p.Proof = append(p.Proof, duelResult)
 			}
-
-			if p.Kill >= p.Target {
-				break OUTER
-			}
+			//a duel is done. round + 1
+			round = round + 1
 		}
 	}
 	data := p.jointData(seed)
@@ -87,23 +84,19 @@ OUTER:
 
 	//结束计数器
 	ticker1.Stop()
-	log.Infof("***AGENT MINED A BLOCK***HEIGHT: %d, SEED: %d, ATTEMPTS: %d\nHASH: %x", p.Height, seed, p.Attempt, hashByte)
-	return nonce, hashByte[:], nil
+	log.Infof("***AGENT MINED A BLOCK***HEIGHT: %d, SEED: %d, KILLS: %d\nHASH: %x", p.Height, seed, p.Kill, hashByte)
+	return hashByte[:], nil
 }
 
 //verify PoK
 func (p *proofOfKill) Verify() bool {
-	if p.Kill != p.Target {
-		log.Infof("Kill target not achieved.")
-		return false
-	}
 	//generate seed locally
 	var seed int64 = GENESIS_SEED
 	if p.Height != 1 {
 		bc := NewBlockchain()
 		LocalLatestBlockHash := bc.GetBlockHashByHeight(p.Height - 1)
 		if LocalLatestBlockHash == nil {
-			log.Infof("Seed(hash) used in incomming block not equals to our latest hash in local chain.")
+			log.Infof("Seed(hash) used in incomming block not found in local chain.")
 			return false
 		}
 		seed = int64(p.generateSeedByHash(LocalLatestBlockHash))
@@ -133,8 +126,8 @@ func (p *proofOfKill) jointData(seed int64) (data []byte) {
 	timeStampByte := util.Int64ToBytes(p.Block.TimeStamp)
 	heightByte := util.Int64ToBytes(int64(p.Block.Height))
 	seedByte := util.Int64ToBytes(int64(seed))
-	targetBitsByte := util.Int64ToBytes(int64(TARGET_BIT))
-	attemptByte := util.Uint64ToBytes(p.Attempt)
+	killByte := util.Uint64ToBytes(p.Kill)
+	agentByte := p.Agent.Serliazle()
 	//拼接成交易数组
 	transData := [][]byte{}
 	for _, v := range p.Block.Transactions {
@@ -150,8 +143,8 @@ func (p *proofOfKill) jointData(seed int64) (data []byte) {
 		heightByte,
 		mt.MerkelRootNode.Data,
 		seedByte,
-		attemptByte,
-		targetBitsByte},
+		killByte,
+		agentByte},
 		[]byte(""))
 	return
 }

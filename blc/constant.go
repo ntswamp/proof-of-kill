@@ -13,8 +13,8 @@ var LISTEN_PORT string
 //挖矿奖励代币数量
 var REWARD_AMOUNT int
 
-//挖矿难度值
-var TARGET_BIT uint64
+//determine how many rounds of duel must be faught
+var ROUND_BIT uint64
 
 var VERIFY_BIT uint64
 
@@ -41,3 +41,6 @@ const MAXINT = math.MaxInt64
 
 //random seed used in genesis block
 const GENESIS_SEED int64 = 8601066706715
+
+//death in a duel delays agent for this value of milliseconds. 1 second = 1000 millisecond
+const DEATH_PUNISHMENT = 200

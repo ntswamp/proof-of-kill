@@ -19,15 +19,12 @@ type Block struct {
 	TimeStamp int64
 	//区块高度
 	Height int
-	//随机数
-	Nonce int64
 	//本区块hash
 	Hash []byte
 	//for verification
-	Agent   agent.Agent
-	Proof   []bool
-	Kill    uint64
-	Attempt uint64
+	Agent agent.Agent
+	Proof []bool
+	Kill  uint64
 }
 
 //生成创世区块
@@ -48,16 +45,14 @@ func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, e
 	timeStamp := time.Now().Unix()
 	agent := *agent.Load()
 	//hash数据+时间戳+上一个区块hash
-	block := Block{preHash, transaction, timeStamp, height, 0, nil, agent, nil, 0, 0}
+	block := Block{preHash, transaction, timeStamp, height, nil, agent, nil, 0}
 	pok := NewProofOfKill(&block)
-	nonce, hash, err := pok.run()
+	hash, err := pok.run()
 	if err != nil {
 		return nil, err
 	}
-	block.Nonce = nonce
 	block.Hash = hash[:]
 	block.Kill = pok.Kill
-	block.Attempt = pok.Attempt
 	log.Info("PoK verify : ", pok.Verify())
 	log.Infof("Made a new block, height: %d", block.Height)
 	return &block, nil

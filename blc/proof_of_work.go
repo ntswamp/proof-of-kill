@@ -24,7 +24,7 @@ type proofOfWork struct {
 func NewProofOfWork(block *Block) *proofOfWork {
 	target := big.NewInt(1)
 	//返回一个大数(1 << 256-TargetBits)
-	target.Lsh(target, uint(256-TARGET_BIT))
+	target.Lsh(target, uint(256-ROUND_BIT))
 	pow := &proofOfWork{block, target}
 	return pow
 }
@@ -78,8 +78,9 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 //检验区块是否有效
 func (p *proofOfWork) Verify() bool {
 	target := big.NewInt(1)
-	target.Lsh(target, uint(256-TARGET_BIT))
-	data := p.jointData(p.Block.Nonce)
+	target.Lsh(target, uint(256-ROUND_BIT))
+	//data := p.jointData(p.Block.Nonce)
+	data := p.jointData(9999999999)
 	hash := sha256.Sum256(data)
 	var hashInt big.Int
 	hashInt.SetBytes(hash[:])
@@ -95,7 +96,7 @@ func (p *proofOfWork) jointData(nonce int64) (data []byte) {
 	timeStampByte := util.Int64ToBytes(p.Block.TimeStamp)
 	heightByte := util.Int64ToBytes(int64(p.Block.Height))
 	nonceByte := util.Int64ToBytes(int64(nonce))
-	targetBitsByte := util.Int64ToBytes(int64(TARGET_BIT))
+	targetBitsByte := util.Int64ToBytes(int64(ROUND_BIT))
 	//拼接成交易数组
 	transData := [][]byte{}
 	for _, v := range p.Block.Transactions {

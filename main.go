@@ -41,7 +41,7 @@ func init() {
 	database.ListenPort = listenPort
 	block.LISTEN_PORT = listenPort
 	block.REWARD_AMOUNT = tokenRewardNum
-	block.TARGET_BIT = mineDifficultyValue
+	block.ROUND_BIT = mineDifficultyValue
 	block.VERIFY_BIT = verifyBit
 	block.MNWORD_PATH = chineseMnwordPath
 

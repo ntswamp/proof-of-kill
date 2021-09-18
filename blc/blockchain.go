@@ -605,10 +605,10 @@ func (bc *blockchain) PrintAllBlockInfo() {
 		}
 		fmt.Println("  	----------------------------------------------------------------------------")
 		fmt.Printf("Time Stamp         %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
-		fmt.Printf("Block Height       %d\n", block.Height)
-		fmt.Printf("Nonce              %d\n", block.Nonce)
+		fmt.Printf("Height             %d\n", block.Height)
+		fmt.Printf("Kill               %d\n", block.Kill)
 		fmt.Printf("Previous Hash      %x\n", block.PreHash)
-		fmt.Printf("Attempt            %x\n", block.Attempt)
+		fmt.Printf("Agent              %s,%s\n", block.Agent.Name, block.Agent.Class)
 		var hashInt big.Int
 		hashInt.SetBytes(block.PreHash)
 		if big.NewInt(0).Cmp(&hashInt) == 0 {
