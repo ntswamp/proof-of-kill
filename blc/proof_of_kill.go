@@ -56,7 +56,7 @@ func (p *proofOfKill) run() ([]byte, error) {
 	for round < p.Round {
 		for _, tx := range p.Transactions {
 			//other nodes mined a block already?
-			if p.Height < NEWEST_BLOCK_HEIGHT {
+			if p.Height <= NEWEST_BLOCK_HEIGHT {
 				//stop ticker
 				ticker1.Stop()
 				return nil, errors.New("***MINING STOPPED***Received The Latest Block From Another Node")
