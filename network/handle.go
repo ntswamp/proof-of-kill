@@ -166,13 +166,13 @@ func handleBlock(content []byte) {
 				blockByte := bc.GetBlockByHash(localSameHeightBlockHash)
 				localSameHeightBlock := blc.Block{}
 				localSameHeightBlock.Deserialize(blockByte)
-				if localSameHeightBlock.Attempt <= block.Attempt {
-					log.Infof("Local block killed faster, local attempt: %d, incoming block attempt: %d.", localSameHeightBlock.Attempt, block.Attempt)
+				if localSameHeightBlock.Kill >= block.Kill {
+					log.Infof("Local block killed more(%d), refused incoming block(%d).", localSameHeightBlock.Kill, block.Kill)
 					return
 				}
 				//remove local slow block
 				bc.RemoveLastBlock(&localSameHeightBlock)
-				log.Infof("Incoming Block killed faster(attempt:%d), replace local slow block(attempt:%d) with it.", block.Attempt, localSameHeightBlock.Attempt)
+				log.Infof("Incoming Block killed more(%d), replace local block(%d) with it.", block.Kill, localSameHeightBlock.Kill)
 			}
 			bc.AddBlock(block)
 			utxos := blc.UTXOHandle{bc}
@@ -181,7 +181,7 @@ func handleBlock(content []byte) {
 			log.Infof("Prehash verified, block height:%d,", block.Height)
 			log.Infof("Received block has passed validation, local chain updated:\nBlock height: %d,\nHash: %x", block.Height, block.Hash)
 		} else {
-			log.Infof("local Previous Block[Height:%d] Hash: %x,\nincomming block's prehash:%x, are not same. refused.", block.Height-1, localPreviousBlockHash, block.PreHash)
+			log.Infof("local Previous Block[Height:%d] Hash: %x,\nincomming block's prehash:%x, they are not same. refused.", block.Height-1, localPreviousBlockHash, block.PreHash)
 		}
 	} else {
 		log.Errorf("Failed PoK verification. block[%x] won't be added to local chain\nkill:%d, target:%d", block.Hash, pok.Kill, pok.Round)
@@ -250,22 +250,27 @@ func handleVersion(content []byte) {
 		for {
 			lastHeight := bc.GetLastBlockHeight()
 			if lastHeight < blc.NEWEST_BLOCK_HEIGHT {
-				log.Info("Updating blocks data, about to send the version message.")
+				log.Info("Updating local data to the latest before sending...")
 				time.Sleep(time.Second)
 			} else {
-				newV := version{versionInfo, localAddr, lastHeight}
+				blockByte := bc.GetBlockByHash(bc.GetBlockHashByHeight(lastHeight))
+				localLatestBlock := blc.Block{}
+				localLatestBlock.Deserialize(blockByte)
+				newV := version{versionInfo, localAddr, lastHeight, localLatestBlock.Kill}
 				data := jointMessage(cVersion, newV.serialize())
 				send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 				break
 			}
 		}
-	} else if blc.NEWEST_BLOCK_HEIGHT <= v.Height {
-		log.Debugf("Other nodes may keep the newer version:%v,requesting hash of new blocks...", v)
+	} else if blc.NEWEST_BLOCK_HEIGHT < v.Height {
+		log.Debugf("Other nodes keep the newer version:%v,requesting hash of new blocks...", v)
 		gh := getHash{blc.NEWEST_BLOCK_HEIGHT, localAddr}
 		blc.NEWEST_BLOCK_HEIGHT = v.Height
+		blc.NEWEST_BLOCK_KILL = v.Kill
 		data := jointMessage(cGetHash, gh.serialize())
 		send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 	} else {
+		if
 		log.Debug("Our node keeps the same height as others, nothing to update.")
 	}
 }

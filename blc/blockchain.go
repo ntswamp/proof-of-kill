@@ -55,9 +55,10 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	tss := []Transaction{ts}
 	//开始生成区块链的第一个区块
 	bc.newGenesisBlockchain(tss)
-	//创世区块后,更新本地最新区块为1并,向全网节点发送当前区块链高度1
+	//创世区块后,更新本地最新区块为1并向全网节点发送当前区块链高度1
 	NEWEST_BLOCK_HEIGHT = 1
-	send.SendVersionToPeers(1)
+	NEWEST_BLOCK_KILL = bc.GetLastBlockKill()
+	send.SendVersionToPeers(1, NEWEST_BLOCK_KILL)
 	fmt.Println("Made Genesis Block.")
 	//重置utxo数据库，将创世数据存入
 	utxos := UTXOHandle{bc}
@@ -371,8 +372,8 @@ func (bc *blockchain) addBlockchain(transaction []Transaction, send Sender) {
 	//将数据同步到UTXO数据库中
 	u := UTXOHandle{bc}
 	u.Synchrodata(transaction)
-	//挖矿出块后 发送高度信息到其他节点
-	send.SendVersionToPeers(nb.Height)
+	//挖矿出块后 send hight & kill to other nodes.
+	send.SendVersionToPeers(nb.Height, nb.Kill)
 }
 
 //添加区块信息到数据库，并更新lastHash
@@ -492,6 +493,15 @@ func (bc *blockchain) GetLastBlockHeight() int {
 		return 0
 	}
 	return lastblock.Height
+}
+
+func (bc *blockchain) GetLastBlockKill() uint64 {
+	bcl := NewBlockchainIterator(bc)
+	lastblock := bcl.Next()
+	if lastblock == nil {
+		return 0
+	}
+	return lastblock.Kill
 }
 
 //通过高度获取区块hash

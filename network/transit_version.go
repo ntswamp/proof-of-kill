@@ -11,7 +11,7 @@ type version struct {
 	Version  byte
 	AddrFrom string
 	Height   int
-	Kills    uint64
+	Kill     uint64
 }
 
 func (v version) serialize() []byte {

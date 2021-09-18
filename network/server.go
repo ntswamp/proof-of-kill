@@ -27,9 +27,10 @@ var send = Send{}
 
 //启动本地节点
 func StartNode(clier Clier) {
-	//先获取本地区块最新高度
+	//get height&kill of the latest local block
 	bc := block.NewBlockchain()
 	block.NEWEST_BLOCK_HEIGHT = bc.GetLastBlockHeight()
+	block.NEWEST_BLOCK_KILL = bc.GetLastBlockKill()
 	log.Infof("[*] Listening on IP address: %s Port: %s", ListenHost, ListenPort)
 	r := rand.Reader
 	// 为本地节点创建RSA密钥对
@@ -108,7 +109,7 @@ func sendVersionToPeers() {
 			break
 		}
 	}
-	send.SendVersionToPeers(block.NEWEST_BLOCK_HEIGHT)
+	send.SendVersionToPeers(block.NEWEST_BLOCK_HEIGHT, block.NEWEST_BLOCK_KILL)
 }
 
 //节点退出信号处理

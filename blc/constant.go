@@ -7,6 +7,9 @@ import (
 //当前节点发现的网络中最新区块高度
 var NEWEST_BLOCK_HEIGHT int
 
+//当前节点发现的网络中最新区块高度
+var NEWEST_BLOCK_KILL uint64
+
 //当前本地监听端口
 var LISTEN_PORT string
 
@@ -42,5 +45,5 @@ const MAXINT = math.MaxInt64
 //random seed used in genesis block
 const GENESIS_SEED int64 = 8601066706715
 
-//death in a duel delays agent for this value of milliseconds. 1 second = 1000 millisecond
+//death in a duel delays agent movement for this value in millisecond. 1 second = 1000 millisecond
 const DEATH_PUNISHMENT = 200
