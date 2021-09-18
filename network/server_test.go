@@ -6,7 +6,7 @@ func TestBytes(t *testing.T) {
 	t.Log("测试命令拼接、拆分功能")
 	{
 		t.Log("\t测试拼接功能：")
-		v := version{versionInfo, "", 10}
+		v := version{versionInfo, "", 10, 12345}
 		b := jointMessage(cVersion, v.serialize())
 		t.Log("\t拼接后的字节数组为:", b)
 		t.Log("\t测试拆分功能：")

@@ -29,8 +29,8 @@ func init() {
 	protocolID := viper.GetString("network.protocol_id")
 	tokenRewardNum := viper.GetInt("blockchain.token_reward_num")
 	tradePoolLength := viper.GetInt("blockchain.trade_pool_length")
-	mineDifficultyValue := viper.GetUint("blockchain.mine_difficulty_value")
-	verifyBit := viper.GetUint("blockchain.verify_bit")
+	mineDifficultyValue := viper.GetUint64("blockchain.mine_difficulty_value")
+	verifyBit := viper.GetUint64("blockchain.verify_bit")
 	chineseMnwordPath := viper.GetString("blockchain.chinese_mnemonic_path")
 
 	network.TradePoolLength = tradePoolLength

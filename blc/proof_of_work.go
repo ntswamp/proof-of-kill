@@ -24,7 +24,7 @@ type proofOfWork struct {
 func NewProofOfWork(block *Block) *proofOfWork {
 	target := big.NewInt(1)
 	//返回一个大数(1 << 256-TargetBits)
-	target.Lsh(target, 256-TARGET_BIT)
+	target.Lsh(target, uint(256-TARGET_BIT))
 	pow := &proofOfWork{block, target}
 	return pow
 }
@@ -78,7 +78,7 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 //检验区块是否有效
 func (p *proofOfWork) Verify() bool {
 	target := big.NewInt(1)
-	target.Lsh(target, 256-TARGET_BIT)
+	target.Lsh(target, uint(256-TARGET_BIT))
 	data := p.jointData(p.Block.Nonce)
 	hash := sha256.Sum256(data)
 	var hashInt big.Int

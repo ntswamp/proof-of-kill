@@ -22,8 +22,8 @@ type proofOfKill struct {
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
-	var target uint64 = util.Uint64Pow(uint64(2), uint64(TARGET_BIT))
-	verifyAmount := util.Uint64Pow(uint64(2), uint64(VERIFY_BIT))
+	var target uint64 = util.Uint64Pow(2, TARGET_BIT)
+	verifyAmount := util.Uint64Pow(2, VERIFY_BIT)
 	pok := &proofOfKill{block, target, verifyAmount}
 	return pok
 }
@@ -34,7 +34,7 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 	var hashByte [32]byte
 	log.Info("Start Mining...")
 
-	//generate random seed by the hash of latest block.
+	//generate random seed from the hash of latest block.
 	//the case of genesis block
 	var seed int64 = GENESIS_SEED
 	if p.Height != 1 {
@@ -56,7 +56,7 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 OUTER:
 	for {
 		for _, tx := range p.Transactions {
-			//are other nodes mined a block already?
+			//other nodes mined a block already?
 			if p.Height <= NEWEST_BLOCK_HEIGHT {
 				//stop ticker
 				ticker1.Stop()

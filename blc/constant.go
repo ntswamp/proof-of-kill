@@ -14,9 +14,9 @@ var LISTEN_PORT string
 var REWARD_AMOUNT int
 
 //挖矿难度值
-var TARGET_BIT uint
+var TARGET_BIT uint64
 
-var VERIFY_BIT uint
+var VERIFY_BIT uint64
 
 //中文助记词地址
 var MNWORD_PATH string
