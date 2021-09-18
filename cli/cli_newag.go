@@ -24,15 +24,15 @@ func (cli *Cli) newAg() {
 		var class int
 		var weapon int
 
-		fmt.Println("Incredibly, a job-hunter-looking agent noticed your visit. you made it with no hesitation.\n\nWhat's his name?")
+		fmt.Println("\nIncredibly, a job-hunter-looking agent noticed your visit. you took it with no hesitation.\nWhat's his name?")
 		fmt.Print("-> ")
 		name, _ = reader.ReadString('\n')
 		// convert CRLF to LF
 		name = strings.Replace(name, "\n", "", -1)
 
-		fmt.Printf("\n%s may help you surviving the world of PoK.\n\n", name)
+		fmt.Printf("\n%s may help you surviving the night.\n\n", name)
 
-		fmt.Println("Now tell me his class, by a number:")
+		fmt.Println("Tell me his class, by a number:")
 		fmt.Println("#1 Warrior")
 		fmt.Println("#2 Mage")
 		fmt.Println("#3 Archer")
@@ -45,8 +45,8 @@ func (cli *Cli) newAg() {
 			_, err = fmt.Scanf("%d", &class)
 		}
 
-		fmt.Printf("Your agent looks like an experienced %s, great.\n", agent.CLASS_TEXT[class])
-		fmt.Printf("\nMaybe go acquire a weapon for your man?\n")
+		fmt.Printf("\nYour agent looks like an experienced %s, great.\n", agent.CLASS_TEXT[class])
+		fmt.Printf("Maybe go acquire a weapon for your man?\n")
 
 		switch class {
 		case agent.CLASS.Warrior:
@@ -91,10 +91,10 @@ func (cli *Cli) newAg() {
 			}
 		}
 
-		fmt.Printf("%s? definitely a wonderful pick.\n\n", agent.WEAPON_TEXT[weapon])
+		fmt.Printf("\n%s? definitely a wonderful pick.\n", agent.WEAPON_TEXT[weapon])
 
-		fmt.Printf("%s is fully primed now.\n", name)
-		fmt.Printf("Name  : %s\n", name)
+		fmt.Printf("%s looks fully primed now.\n", name)
+		fmt.Printf("Agent name  : %s\n", name)
 		fmt.Printf("Class : %s\n", agent.CLASS_TEXT[class])
 		fmt.Printf("Weapon: %s\n", agent.WEAPON_TEXT[weapon])
 		fmt.Printf("\nGo with this perfect agent?: (y/n)\n")

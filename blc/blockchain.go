@@ -40,13 +40,13 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	wallets := NewWallets(bc.BD)
 	genesisKeys, ok := wallets.Wallets[address]
 	if !ok {
-		log.Fatal("没有找到地址对应的公私钥信息")
+		log.Fatal("No pub/priv keypair associated with address.")
 	}
 	//通过地址获得rip160(sha256(publickey))
 	publicKeyHash := generatePublicKeyHash(genesisKeys.PublicKey)
 	txo := TXOutput{value, publicKeyHash}
 	/* PoK */
-	god := agent.New("PoK God", agent.CLASS.Mage, agent.WEAPON.TwilightStaff)
+	god := agent.GENESIS_AGENT
 	/* PoK */
 	ts := Transaction{nil, []TXInput{txi}, []TXOutput{txo}, *god}
 	ts.hash()
@@ -78,11 +78,11 @@ func (bc *blockchain) newGenesisBlockchain(transaction []Transaction) {
 //创建挖矿奖励地址交易
 func (bc *blockchain) CreataRewardTransaction(address string) Transaction {
 	if address == "" {
-		log.Warn("没有设置挖矿奖励地址，如果出块则不会给予奖励代币")
+		log.Warn("Mining address not set, you won't get any reward even mined a block.")
 		return Transaction{}
 	}
 	if !IsVaildBitcoinAddress(address) {
-		log.Warnf("奖励地址格式不正确:%s\n", address)
+		log.Warnf("Invalid address: %s\n", address)
 		return Transaction{}
 	}
 

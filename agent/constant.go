@@ -47,3 +47,5 @@ var WEAPON_TEXT = map[int]string{
 	WEAPON.HammerOfJudgement: "Hammer Of Judgement",
 	WEAPON.BoneCrusher:       "Bone Crusher",
 }
+
+var GENESIS_AGENT = New("PoKGod", CLASS.Mage, WEAPON.TwilightStaff)
