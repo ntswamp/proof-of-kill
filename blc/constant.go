@@ -16,6 +16,8 @@ var REWARD_AMOUNT int
 //挖矿难度值
 var TARGET_BIT uint
 
+var VERIFY_BIT uint
+
 //中文助记词地址
 var MNWORD_PATH string
 

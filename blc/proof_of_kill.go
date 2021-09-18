@@ -1,33 +1,28 @@
 package block
 
 import (
-	"bytes"
 	"encoding/binary"
 	"errors"
 	"math/rand"
 	"time"
 
+	log "github.com/corgi-kx/logcustom"
 	"github.com/ntswamp/proof-of-kill/agent"
 	"github.com/ntswamp/proof-of-kill/util"
-
-	log "github.com/corgi-kx/logcustom"
 )
 
 type proofOfKill struct {
 	*Block
 	//target kills need to be reached
-	Target uint64
-	agent  *agent.Agent
-	//current kills
-	Kill uint64
+	Target       uint64
+	verifyAmount uint64
 }
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
 	var target uint64 = util.Uint64Pow(uint64(10), uint64(TARGET_BIT))
-	var kill uint64 = 0
-	agent := agent.Load()
-	pok := &proofOfKill{block, target, agent, kill}
+	verifyAmount := util.Uint64Pow(uint64(10), uint64(VERIFY_BIT))
+	pok := &proofOfKill{block, target, verifyAmount}
 	return pok
 }
 
@@ -41,7 +36,7 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 	//the case of genesis block
 	var seed int64 = GENESIS_SEED
 	if p.Height != 1 {
-		seed = int64(p.generateSeedByLatestHash())
+		seed = int64(p.generateSeedByHash(p.PreHash))
 	}
 	rand.Seed(seed)
 
@@ -63,13 +58,21 @@ OUTER:
 			if p.Height <= NEWEST_BLOCK_HEIGHT {
 				//stop ticker
 				ticker1.Stop()
-				return 0, nil, errors.New("***MINING STOPPED***Received the Latest Block")
+				return 0, nil, errors.New("***MINING STOPPED***Received The Latest Block Already")
 			}
 			//generate random part of damage
-			myRandom := util.RandomInRange(0, p.agent.Luck)
+			myRandom := util.RandomInRange(0, p.Agent.Luck)
 			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
-			if p.isKilledOpponent(&tx.Agent, myRandom, enemyRandom) {
+
+			duelResult := p.isKilledOpponent(&tx.Agent, myRandom, enemyRandom)
+			if duelResult == true {
 				p.Kill = p.Kill + 1
+			}
+			//a duel is done.
+			p.Attempt = p.Attempt + 1
+
+			if p.Attempt < p.verifyAmount {
+				p.Proof = append(p.Proof, duelResult)
 			}
 
 			if p.Kill >= p.Target {
@@ -80,15 +83,46 @@ OUTER:
 
 	//结束计数器
 	ticker1.Stop()
-	log.Infof("***AGENT MINED A BLOCK***HEIGHT:%d, SEED:%d, HASH: %x", p.Height, seed, hashByte)
+	log.Infof("***AGENT MINED A BLOCK***HEIGHT: %d, SEED: %d, ATTEMPTS: %d\nHASH: %x", p.Height, seed, p.Attempt, hashByte)
 	return nonce, hashByte[:], nil
 }
 
-//检验区块是否有效
+//verify PoK
 func (p *proofOfKill) Verify() bool {
-	return p.Kill == p.Target
+	if p.Kill != p.Target {
+		log.Infof("PoK verification failed. kill target not achieved.")
+		return false
+	}
+	//generate seed locally
+	var seed int64 = GENESIS_SEED
+	if p.Height != 1 {
+		bc := NewBlockchain()
+		LocalLatestBlockHash := bc.GetBlockHashByHeight(p.Height - 1)
+		if LocalLatestBlockHash == nil {
+			log.Infof("PoK verification failed. the seed(hash) used in incomming block not equals to our latest hash in local chain.")
+			return false
+		}
+		seed = int64(p.generateSeedByHash(LocalLatestBlockHash))
+	}
+	rand.Seed(seed)
+
+	var i uint64
+	for i = 0; i < p.verifyAmount; i++ {
+		for _, tx := range p.Transactions {
+
+			//generate random part of damage
+			minerRandom := util.RandomInRange(0, p.Agent.Luck)
+			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
+			duelResult := p.isKilledOpponent(&tx.Agent, minerRandom, enemyRandom)
+			if duelResult != p.Proof[i] {
+				return false
+			}
+		}
+	}
+	return true
 }
 
+/*    PoW
 //将上一区块hash、数据、时间戳、难度位数、随机数 拼接成字节数组
 func (p *proofOfKill) jointData(nonce int64) (data []byte) {
 	preHash := p.Block.PreHash
@@ -115,9 +149,10 @@ func (p *proofOfKill) jointData(nonce int64) (data []byte) {
 		[]byte(""))
 	return
 }
+PoW */
 
-func (p *proofOfKill) generateSeedByLatestHash() uint64 {
-	var seed uint64 = binary.BigEndian.Uint64(p.PreHash)
+func (p *proofOfKill) generateSeedByHash(hash []byte) uint64 {
+	var seed uint64 = binary.BigEndian.Uint64(hash)
 	return seed
 }
 
@@ -125,10 +160,10 @@ func (p *proofOfKill) generateSeedByLatestHash() uint64 {
 func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enemyRandom int) bool {
 	log.Infof("my random:%d, enemy random:%d", myRandom, enemyRandom)
 
-	me := *p.agent
+	me := p.Agent
 	enemy := *opponent
 
-	//continue until one died
+	//round continues until one died
 	for me.Health > 0 && enemy.Health > 0 {
 
 		//decide first mover
@@ -136,12 +171,10 @@ func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enem
 			//my turn
 			enemy.TakeDamage(me.DealDamage(myRandom))
 			if enemy.IsDied() {
-				log.Infof("won")
 				return true
 			}
 			me.TakeDamage(enemy.DealDamage(enemyRandom))
 			if me.IsDied() {
-				log.Infof("lost")
 				return false
 			}
 
@@ -149,12 +182,10 @@ func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enem
 			//enemy's turn
 			me.TakeDamage(enemy.DealDamage(enemyRandom))
 			if me.IsDied() {
-				log.Infof("lost")
 				return false
 			}
 			enemy.TakeDamage(me.DealDamage(myRandom))
 			if enemy.IsDied() {
-				log.Infof("won")
 				return true
 			}
 		}

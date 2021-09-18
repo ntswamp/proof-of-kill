@@ -50,12 +50,12 @@ func (p *proofOfWork) run() (int64, []byte, error) {
 		if p.Height <= NEWEST_BLOCK_HEIGHT {
 			//结束计数器
 			ticker1.Stop()
-			return 0, nil, errors.New("***MINING STOPPED***Received the Latest Block")
+			return 0, nil, errors.New("***MINING STOPPED***Received The Latest Block From Another Node.")
 		}
 		data := p.jointData(nonce)
 		hashByte = sha256.Sum256(data)
 		//fmt.Printf("\r current hash : %x", hashByte)
-		//将hash值转换为大数字
+		//convert hash to a big Int
 		hashInt.SetBytes(hashByte[:])
 		//如果hash后的data值小于设置的挖矿难度大数字,则代表挖矿成功!
 		if hashInt.Cmp(p.Target) == -1 {

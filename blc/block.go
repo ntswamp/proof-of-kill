@@ -7,6 +7,7 @@ import (
 	"time"
 
 	log "github.com/corgi-kx/logcustom"
+	"github.com/ntswamp/proof-of-kill/agent"
 )
 
 type Block struct {
@@ -23,7 +24,10 @@ type Block struct {
 	//本区块hash
 	Hash []byte
 	//for verification
-	//Blood string
+	Agent   agent.Agent
+	Proof   []bool
+	Kill    uint64
+	Attempt uint64
 }
 
 //生成创世区块
@@ -42,8 +46,9 @@ func newGenesisBlock(transaction []Transaction) *Block {
 //进行挖矿来生成区块
 func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, error) {
 	timeStamp := time.Now().Unix()
+	agent := *agent.Load()
 	//hash数据+时间戳+上一个区块hash
-	block := Block{preHash, transaction, timeStamp, height, 0, nil}
+	block := Block{preHash, transaction, timeStamp, height, 0, nil, agent, nil, 0, 0}
 	pok := NewProofOfKill(&block)
 	nonce, hash, err := pok.run()
 	if err != nil {
@@ -51,6 +56,8 @@ func mineBlock(transaction []Transaction, preHash []byte, height int) (*Block, e
 	}
 	block.Nonce = nonce
 	block.Hash = hash[:]
+	block.Kill = pok.Kill
+	block.Attempt = pok.Attempt
 	log.Info("PoK verify : ", pok.Verify())
 	log.Infof("Made a new block, height: %d", block.Height)
 	return &block, nil
