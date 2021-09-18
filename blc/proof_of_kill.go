@@ -102,7 +102,7 @@ func (p *proofOfKill) Verify() bool {
 		seed = int64(p.generateSeedByHash(LocalLatestBlockHash))
 	}
 	rand.Seed(seed)
-
+	log.Debugf("seed: %d", seed)
 	var i uint64
 	for i = 0; i < p.verifyAmount-1; i++ {
 		for _, tx := range p.Transactions {
