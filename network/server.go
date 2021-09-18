@@ -29,7 +29,7 @@ var send = Send{}
 func StartNode(clier Clier) {
 	//先获取本地区块最新高度
 	bc := block.NewBlockchain()
-	block.NewestBlockHeight = bc.GetLastBlockHeight()
+	block.NEWEST_BLOCK_HEIGHT = bc.GetLastBlockHeight()
 	log.Infof("[*] Listening on IP address: %s Port: %s", ListenHost, ListenPort)
 	r := rand.Reader
 	// 为本地节点创建RSA密钥对
@@ -108,7 +108,7 @@ func sendVersionToPeers() {
 			break
 		}
 	}
-	send.SendVersionToPeers(block.NewestBlockHeight)
+	send.SendVersionToPeers(block.NEWEST_BLOCK_HEIGHT)
 }
 
 //节点退出信号处理

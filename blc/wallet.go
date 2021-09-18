@@ -87,21 +87,21 @@ func (w *wallets) storage(address []byte, keys *bitcoinKeys, bd *database.Blockc
 	bd.Put(address, keys.serliazle(), database.AddrBucket)
 
 	//将地址存入地址导航
-	listBytes := bd.View([]byte(addrListMapping), database.AddrBucket)
+	listBytes := bd.View([]byte(ADDR_LIST_KEY), database.AddrBucket)
 	if len(listBytes) == 0 {
 		a := addressList{address}
-		bd.Put([]byte(addrListMapping), a.serliazle(), database.AddrBucket)
+		bd.Put([]byte(ADDR_LIST_KEY), a.serliazle(), database.AddrBucket)
 	} else {
 		addressList := addressList{}
 		addressList.Deserialize(listBytes)
 		addressList = append(addressList, address)
-		bd.Put([]byte(addrListMapping), addressList.serliazle(), database.AddrBucket)
+		bd.Put([]byte(ADDR_LIST_KEY), addressList.serliazle(), database.AddrBucket)
 	}
 }
 
 //获取全部地址信息
 func GetAllAddress(bd *database.BlockchainDB) *addressList {
-	listBytes := bd.View([]byte(addrListMapping), database.AddrBucket)
+	listBytes := bd.View([]byte(ADDR_LIST_KEY), database.AddrBucket)
 	if len(listBytes) == 0 {
 		return nil
 	}

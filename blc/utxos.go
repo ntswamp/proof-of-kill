@@ -43,7 +43,7 @@ func (u *UTXOHandle) findUTXOFromAddress(address string) []*UTXO {
 	utxosSlice := []*UTXO{}
 	//获取bolt迭代器，遍历整个UTXO数据库
 	//打开数据库
-	var DBFileName = "blockchain_" + ListenPort + ".db"
+	var DBFileName = "blockchain_" + LISTEN_PORT + ".db"
 	db, err := bolt.Open(DBFileName, 0600, nil)
 	if err != nil {
 		log.Panic(err)

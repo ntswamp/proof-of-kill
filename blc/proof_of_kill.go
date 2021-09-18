@@ -24,7 +24,7 @@ type proofOfKill struct {
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
-	var target uint64 = util.Uint64Pow(uint64(10), uint64(TargetBits))
+	var target uint64 = util.Uint64Pow(uint64(10), uint64(TARGET_BIT))
 	var kill uint64 = 0
 	agent := agent.Load()
 	pok := &proofOfKill{block, target, agent, kill}
@@ -37,15 +37,15 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 	var hashByte [32]byte
 	log.Info("Start Mining...")
 
-	//initialize random seed
-	//genesis block
-	var seed int64 = 20210917004703
+	//generate random seed by the hash of latest block.
+	//the case of genesis block
+	var seed int64 = GENESIS_SEED
 	if p.Height != 1 {
-		seed = int64(p.generateSeedByHash())
+		seed = int64(p.generateSeedByLatestHash())
 	}
 	rand.Seed(seed)
 
-	//开启一个计数器,每隔五秒打印一下当前挖矿,用来直观展现挖矿情况
+	//print mining progress every 5 seconds
 	times := 0
 	ticker1 := time.NewTicker(5 * time.Second)
 	go func(t *time.Ticker) {
@@ -59,9 +59,9 @@ func (p *proofOfKill) run() (int64, []byte, error) {
 OUTER:
 	for {
 		for _, tx := range p.Transactions {
-			//检测网络上其他节点是否已经挖出了区块
-			if p.Height <= NewestBlockHeight {
-				//结束计数器
+			//are other nodes mined a block already?
+			if p.Height <= NEWEST_BLOCK_HEIGHT {
+				//stop ticker
 				ticker1.Stop()
 				return 0, nil, errors.New("***MINING STOPPED***Received the Latest Block")
 			}
@@ -95,7 +95,7 @@ func (p *proofOfKill) jointData(nonce int64) (data []byte) {
 	timeStampByte := util.Int64ToBytes(p.Block.TimeStamp)
 	heightByte := util.Int64ToBytes(int64(p.Block.Height))
 	nonceByte := util.Int64ToBytes(int64(nonce))
-	targetBitsByte := util.Int64ToBytes(int64(TargetBits))
+	targetBitsByte := util.Int64ToBytes(int64(TARGET_BIT))
 	//拼接成交易数组
 	transData := [][]byte{}
 	for _, v := range p.Block.Transactions {
@@ -116,13 +116,14 @@ func (p *proofOfKill) jointData(nonce int64) (data []byte) {
 	return
 }
 
-func (p *proofOfKill) generateSeedByHash() uint64 {
-	var seed uint64 = binary.BigEndian.Uint64(p.Hash)
+func (p *proofOfKill) generateSeedByLatestHash() uint64 {
+	var seed uint64 = binary.BigEndian.Uint64(p.PreHash)
 	return seed
 }
 
 //return true if win
 func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enemyRandom int) bool {
+	log.Infof("my random:%d, enemy random:%d", myRandom, enemyRandom)
 
 	me := *p.agent
 	enemy := *opponent
@@ -135,10 +136,12 @@ func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enem
 			//my turn
 			enemy.TakeDamage(me.DealDamage(myRandom))
 			if enemy.IsDied() {
+				log.Infof("won")
 				return true
 			}
 			me.TakeDamage(enemy.DealDamage(enemyRandom))
 			if me.IsDied() {
+				log.Infof("lost")
 				return false
 			}
 
@@ -146,10 +149,12 @@ func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enem
 			//enemy's turn
 			me.TakeDamage(enemy.DealDamage(enemyRandom))
 			if me.IsDied() {
+				log.Infof("lost")
 				return false
 			}
 			enemy.TakeDamage(me.DealDamage(myRandom))
 			if enemy.IsDied() {
+				log.Infof("won")
 				return true
 			}
 		}

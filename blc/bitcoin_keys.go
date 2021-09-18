@@ -7,9 +7,10 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
-	"github.com/ntswamp/proof-of-kill/util"
 	"math/big"
 	"os"
+
+	"github.com/ntswamp/proof-of-kill/util"
 
 	log "github.com/corgi-kx/logcustom"
 )
@@ -70,7 +71,7 @@ func (b bitcoinKeys) jointSpeed() []byte {
 
 //获取中文种子
 func getChineseMnemonicWord() []string {
-	file, err := os.Open(ChineseMnwordPath)
+	file, err := os.Open(MNWORD_PATH)
 	//file,err:=os.Open("D:/programming/golang/GOPATH/src/github.com/corgi-kx/blockchain_golang/blc/chinese_mnemonic_world.txt")
 	if err != nil {
 		log.Panic(err)
@@ -117,7 +118,7 @@ func (b *bitcoinKeys) getAddress() []byte {
 	//1.ripemd160(sha256(publickey))
 	ripPubKey := generatePublicKeyHash(b.PublicKey)
 	//2.最前面添加一个字节的版本信息获得 versionPublickeyHash
-	versionPublickeyHash := append([]byte{version}, ripPubKey[:]...)
+	versionPublickeyHash := append([]byte{VERSION}, ripPubKey[:]...)
 	//3.sha256(sha256(versionPublickeyHash))  取最后四个字节的值
 	tailHash := checkSumHash(versionPublickeyHash)
 	//4.拼接最终hash versionPublickeyHash + checksumHash
@@ -163,14 +164,14 @@ func generatePublicKeyHash(publicKey []byte) []byte {
 func getPublicKeyHashFromAddress(address string) []byte {
 	addressBytes := []byte(address)
 	fullHash := util.Base58Decode(addressBytes)
-	publicKeyHash := fullHash[1 : len(fullHash)-checkSum]
+	publicKeyHash := fullHash[1 : len(fullHash)-CHECKSUM]
 	return publicKeyHash
 }
 
 func checkSumHash(versionPublickeyHash []byte) []byte {
 	versionPublickeyHashSha1 := sha256.Sum256(versionPublickeyHash)
 	versionPublickeyHashSha2 := sha256.Sum256(versionPublickeyHashSha1[:])
-	tailHash := versionPublickeyHashSha2[:checkSum]
+	tailHash := versionPublickeyHashSha2[:CHECKSUM]
 	return tailHash
 }
 
@@ -181,8 +182,8 @@ func IsVaildBitcoinAddress(address string) bool {
 	if len(fullHash) != 25 {
 		return false
 	}
-	prefixHash := fullHash[:len(fullHash)-checkSum]
-	tailHash := fullHash[len(fullHash)-checkSum:]
+	prefixHash := fullHash[:len(fullHash)-CHECKSUM]
+	tailHash := fullHash[len(fullHash)-CHECKSUM:]
 	tailHash2 := checkSumHash(prefixHash)
 	if bytes.Compare(tailHash, tailHash2[:]) == 0 {
 		return true
@@ -203,7 +204,7 @@ func GetAddressFromPublicKey(publickey []byte) string {
 //通过公钥信息获得地址
 func GetAddressFromPublicKeyHash(publickeyHash []byte) string {
 	//2.最前面添加一个字节的版本信息获得 versionPublickeyHash
-	versionPublickeyHash := append([]byte{version}, publickeyHash[:]...)
+	versionPublickeyHash := append([]byte{VERSION}, publickeyHash[:]...)
 	//3.sha256(sha256(versionPublickeyHash))  取最后四个字节的值
 	tailHash := checkSumHash(versionPublickeyHash)
 	//4.拼接最终hash versionPublickeyHash + checksumHash

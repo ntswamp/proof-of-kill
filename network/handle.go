@@ -64,7 +64,7 @@ func handleTransaction(content []byte) {
 		for i := range t.Ts {
 			for _, v := range tradePool.Ts {
 				if bytes.Equal(t.Ts[i].Vint[0].PublicKey, v.Vint[0].PublicKey) {
-					s := fmt.Sprintf("当前交易池里，已存在此笔地址转账信息(%s)，顾暂不能进行转账，请等待上笔交易出块后在进行此地址转账操作", blc.GetAddressFromPublicKey(t.Ts[i].Vint[0].PublicKey))
+					s := fmt.Sprintf("Transaction involved address[%s] already exists in current pool. retry after that transaction get mined.", blc.GetAddressFromPublicKey(t.Ts[i].Vint[0].PublicKey))
 					log.Error(s)
 					t.Ts = append(t.Ts[:i], t.Ts[i+1:]...)
 					goto circle
@@ -100,7 +100,7 @@ func mineBlock(t Transactions) {
 			//如果当前节点区块高度小于网络最新高度，则等待节点更新区块后在进行挖矿
 			for {
 				currentHeight := bc.GetLastBlockHeight()
-				if currentHeight >= blc.NewestBlockHeight {
+				if currentHeight >= blc.NEWEST_BLOCK_HEIGHT {
 					break
 				}
 				time.Sleep(time.Second * 1)
@@ -131,10 +131,10 @@ func handleBlock(content []byte) {
 	block.Deserialize(content)
 	log.Infof("Received a block from another node, Hash of that block：%x", block.Hash)
 	bc := blc.NewBlockchain()
-	//consensus := blc.NewProofOfWork(block)
-	consensus := blc.NewProofOfKill(block)
-	//重新计算本块hash,进行pow验证
-	if consensus.Verify() {
+	//pow := blc.NewProofOfWork(block)
+	pok := blc.NewProofOfKill(block)
+	//重新计算本块hash,进行pok验证
+	if pok.Verify() {
 		log.Infof("PoK verified, Block height：%d", block.Height)
 		//如果是创世区块则直接添加进本地库
 		currentHash := bc.GetBlockHashByHeight(block.Height)
@@ -169,7 +169,7 @@ func handleBlock(content []byte) {
 			log.Infof("上一个块高度为%d的hash值为:%x,与本块中的prehash值:%x不一致,固不存入区块链中", block.Height-1, lastBlockHash, block.Hash)
 		}
 	} else {
-		log.Errorf("Failed PoK verification. block[%x] can't be added to local chain\nkill:%d, target:%d", block.Hash, consensus.Kill, consensus.Target)
+		log.Errorf("Failed PoK verification. block[%x] can't be added to local chain\nkill:%d, target:%d", block.Hash, pok.Kill, pok.Target)
 	}
 }
 
@@ -229,11 +229,11 @@ func handleVersion(content []byte) {
 	v := version{}
 	v.deserialize(content)
 	bc := blc.NewBlockchain()
-	if blc.NewestBlockHeight > v.Height {
+	if blc.NEWEST_BLOCK_HEIGHT > v.Height {
 		log.Info("Other nodes have a smaller height,sending version messages to update them...")
 		for {
 			currentHeight := bc.GetLastBlockHeight()
-			if currentHeight < blc.NewestBlockHeight {
+			if currentHeight < blc.NEWEST_BLOCK_HEIGHT {
 				log.Info("Updating blocks data, about to send the version message.")
 				time.Sleep(time.Second)
 			} else {
@@ -243,10 +243,10 @@ func handleVersion(content []byte) {
 				break
 			}
 		}
-	} else if blc.NewestBlockHeight < v.Height {
+	} else if blc.NEWEST_BLOCK_HEIGHT < v.Height {
 		log.Debugf("Other nodes have the newer version:%v,requesting hash of new blocks...", v)
-		gh := getHash{blc.NewestBlockHeight, localAddr}
-		blc.NewestBlockHeight = v.Height
+		gh := getHash{blc.NEWEST_BLOCK_HEIGHT, localAddr}
+		blc.NEWEST_BLOCK_HEIGHT = v.Height
 		data := jointMessage(cGetHash, gh.serialize())
 		send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 	} else {

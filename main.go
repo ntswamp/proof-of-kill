@@ -38,10 +38,10 @@ func init() {
 	network.ProtocolID = protocolID
 	network.ListenPort = listenPort
 	database.ListenPort = listenPort
-	block.ListenPort = listenPort
-	block.TokenRewardNum = tokenRewardNum
-	block.TargetBits = uint(mineDifficultyValue)
-	block.ChineseMnwordPath = chineseMnwordPath
+	block.LISTEN_PORT = listenPort
+	block.REWARD_AMOUNT = tokenRewardNum
+	block.TARGET_BIT = uint(mineDifficultyValue)
+	block.MNWORD_PATH = chineseMnwordPath
 
 	//set up logs
 	file, err := os.OpenFile(fmt.Sprintf("%slog%s.txt", logPath, listenPort), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)

@@ -55,7 +55,7 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 	//开始生成区块链的第一个区块
 	bc.newGenesisBlockchain(tss)
 	//创世区块后,更新本地最新区块为1并,向全网节点发送当前区块链高度1
-	NewestBlockHeight = 1
+	NEWEST_BLOCK_HEIGHT = 1
 	send.SendVersionToPeers(1)
 	fmt.Println("Made Genesis Block.")
 	//重置utxo数据库，将创世数据存入
@@ -66,7 +66,7 @@ func (bc *blockchain) CreataGenesisTransaction(address string, value int, send S
 //创建区块链
 func (bc *blockchain) newGenesisBlockchain(transaction []Transaction) {
 	//判断一下是否已生成创世区块
-	if len(bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket)) != 0 {
+	if len(bc.BD.View([]byte(LATEST_BLOCK_HASH_KEY), database.BlockBucket)) != 0 {
 		log.Fatal("Cannot Make Multiple Genesis Blocks")
 	}
 	//生成创世区块
@@ -87,7 +87,7 @@ func (bc *blockchain) CreataRewardTransaction(address string) Transaction {
 	}
 
 	publicKeyHash := getPublicKeyHashFromAddress(address)
-	txo := TXOutput{TokenRewardNum, publicKeyHash}
+	txo := TXOutput{REWARD_AMOUNT, publicKeyHash}
 	ts := Transaction{nil, nil, []TXOutput{txo}, *agent.Load()}
 	ts.hash()
 	return ts
@@ -96,12 +96,12 @@ func (bc *blockchain) CreataRewardTransaction(address string) Transaction {
 //创建UTXO交易实例
 func (bc *blockchain) CreateTransaction(from, to string, amount string, send Sender) {
 	//判断一下是否已生成创世区块
-	if len(bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket)) == 0 {
+	if len(bc.BD.View([]byte(LATEST_BLOCK_HASH_KEY), database.BlockBucket)) == 0 {
 		log.Error("Can't transfer. gensis block not found.")
 		return
 	}
 	//检测是否设置了挖矿地址,没设置的话会给出提示
-	if len(bc.BD.View([]byte(RewardAddrMapping), database.AddrBucket)) == 0 {
+	if len(bc.BD.View([]byte(REWARD_ADDR_KEY), database.AddrBucket)) == 0 {
 		log.Warn("Mining address not set, you won't get any reward.")
 	}
 
@@ -282,7 +282,7 @@ func (bc *blockchain) Transfer(tss []Transaction, send Sender) {
 		return
 	}
 	//如果设置了奖励地址，则挖矿成功后给予奖励代币
-	rewardTs := bc.CreataRewardTransaction(string(bc.BD.View([]byte(RewardAddrMapping), database.AddrBucket)))
+	rewardTs := bc.CreataRewardTransaction(string(bc.BD.View([]byte(REWARD_ADDR_KEY), database.AddrBucket)))
 	if rewardTs.TxHash != nil {
 		tss = append(tss, rewardTs)
 	}
@@ -350,17 +350,17 @@ circle:
 
 //设置挖矿奖励地址
 func (bc *blockchain) SetRewardAddress(address string) {
-	bc.BD.Put([]byte(RewardAddrMapping), []byte(address), database.AddrBucket)
+	bc.BD.Put([]byte(REWARD_ADDR_KEY), []byte(address), database.AddrBucket)
 }
 
 //将交易添加进区块链中(内含挖矿操作)
 func (bc *blockchain) addBlockchain(transaction []Transaction, send Sender) {
-	preBlockbyte := bc.BD.View(bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket), database.BlockBucket)
+	preBlockbyte := bc.BD.View(bc.BD.View([]byte(LATEST_BLOCK_HASH_KEY), database.BlockBucket), database.BlockBucket)
 	preBlock := Block{}
 	preBlock.Deserialize(preBlockbyte)
 	height := preBlock.Height + 1
 	//进行挖矿
-	nb, err := mineBlock(transaction, bc.BD.View([]byte(LastBlockHashMapping), database.BlockBucket), height)
+	nb, err := mineBlock(transaction, bc.BD.View([]byte(LATEST_BLOCK_HASH_KEY), database.BlockBucket), height)
 	if err != nil {
 		log.Warn(err)
 		return
@@ -380,7 +380,7 @@ func (bc *blockchain) AddBlock(block *Block) {
 	bci := NewBlockchainIterator(bc)
 	currentBlock := bci.Next()
 	if currentBlock == nil || currentBlock.Height < block.Height {
-		bc.BD.Put([]byte(LastBlockHashMapping), block.Hash, database.BlockBucket)
+		bc.BD.Put([]byte(LATEST_BLOCK_HASH_KEY), block.Hash, database.BlockBucket)
 	}
 }
 
