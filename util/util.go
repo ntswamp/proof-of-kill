@@ -16,6 +16,13 @@ func Int64ToBytes(i int64) []byte {
 	return buf
 }
 
+//int64转换成字节数组
+func Uint64ToBytes(i uint64) []byte {
+	var buf = make([]byte, 8)
+	binary.BigEndian.PutUint64(buf, i)
+	return buf
+}
+
 //字节数组转换为int
 func BytesToInt(bys []byte) int {
 	bytebuff := bytes.NewBuffer(bys)

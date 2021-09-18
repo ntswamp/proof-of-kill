@@ -1,6 +1,8 @@
 package block
 
 import (
+	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 	"math/rand"
@@ -80,6 +82,8 @@ OUTER:
 			}
 		}
 	}
+	data := p.jointData(seed)
+	hashByte = sha256.Sum256(data)
 
 	//结束计数器
 	ticker1.Stop()
@@ -123,14 +127,14 @@ func (p *proofOfKill) Verify() bool {
 	return true
 }
 
-/*    PoW
-//将上一区块hash、数据、时间戳、难度位数、随机数 拼接成字节数组
-func (p *proofOfKill) jointData(nonce int64) (data []byte) {
+//making hash
+func (p *proofOfKill) jointData(seed int64) (data []byte) {
 	preHash := p.Block.PreHash
 	timeStampByte := util.Int64ToBytes(p.Block.TimeStamp)
 	heightByte := util.Int64ToBytes(int64(p.Block.Height))
-	nonceByte := util.Int64ToBytes(int64(nonce))
+	seedByte := util.Int64ToBytes(int64(seed))
 	targetBitsByte := util.Int64ToBytes(int64(TARGET_BIT))
+	attemptByte := util.Uint64ToBytes(p.Attempt)
 	//拼接成交易数组
 	transData := [][]byte{}
 	for _, v := range p.Block.Transactions {
@@ -145,12 +149,12 @@ func (p *proofOfKill) jointData(nonce int64) (data []byte) {
 		timeStampByte,
 		heightByte,
 		mt.MerkelRootNode.Data,
-		nonceByte,
+		seedByte,
+		attemptByte,
 		targetBitsByte},
 		[]byte(""))
 	return
 }
-PoW */
 
 func (p *proofOfKill) generateSeedByHash(hash []byte) uint64 {
 	var seed uint64 = binary.BigEndian.Uint64(hash)

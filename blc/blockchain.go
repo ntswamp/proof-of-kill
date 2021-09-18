@@ -584,7 +584,7 @@ func (bc *blockchain) PrintAllBlockInfo() {
 		fmt.Println("  	------------------------------Transaction Data------------------------------")
 		for _, v := range block.Transactions {
 			fmt.Printf("        transaction id:  %x\n", v.TxHash)
-			fmt.Printf("        sender agent  :  %s\n, %s\n", v.Agent.Name, v.Agent.Class)
+			fmt.Printf("        sender agent  :  %s, %s\n", v.Agent.Name, v.Agent.Class)
 			fmt.Println("        tx_input     :")
 			for _, vIn := range v.Vint {
 				fmt.Printf("		 	 tx id      :  %x\n", vIn.TxHash)
