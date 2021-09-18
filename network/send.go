@@ -24,7 +24,7 @@ func (s Send) SendSignOutToPeers() {
 
 //向网络中其他节点发送高度信息
 func (s Send) SendVersionToPeers(lastHeight int) {
-	newV := version{versionInfo, lastHeight, localAddr}
+	newV := version{versionInfo, localAddr, lastHeight}
 	data := jointMessage(cVersion, newV.serialize())
 	for _, v := range peerPool {
 		s.SendMessage(v, data)

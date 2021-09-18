@@ -498,12 +498,12 @@ func (bc *blockchain) GetLastBlockHeight() int {
 func (bc *blockchain) GetBlockHashByHeight(height int) []byte {
 	bcl := NewBlockchainIterator(bc)
 	for {
-		currentBlock := bcl.Next()
-		if currentBlock == nil {
+		lastBlock := bcl.Next()
+		if lastBlock == nil {
 			return nil
-		} else if currentBlock.Height == height {
-			return currentBlock.Hash
-		} else if isGenesisBlock(currentBlock) {
+		} else if lastBlock.Height == height {
+			return lastBlock.Hash
+		} else if isGenesisBlock(lastBlock) {
 			return nil
 		}
 	}
@@ -584,7 +584,7 @@ func (bc *blockchain) PrintAllBlockInfo() {
 		fmt.Println("  	------------------------------Transaction Data------------------------------")
 		for _, v := range block.Transactions {
 			fmt.Printf("        transaction id:  %x\n", v.TxHash)
-			fmt.Printf("        sender agent  :  %x\n, %x\n", v.Agent.Name, v.Agent.Class)
+			fmt.Printf("        sender agent  :  %s\n, %s\n", v.Agent.Name, v.Agent.Class)
 			fmt.Println("        tx_input     :")
 			for _, vIn := range v.Vint {
 				fmt.Printf("		 	 tx id      :  %x\n", vIn.TxHash)

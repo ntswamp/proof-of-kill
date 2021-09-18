@@ -15,7 +15,7 @@ network:
   # local monitoring IP
   listen_host: "127.0.0.1"
   # local monitoring port
-  listen_port: "6668"
+  listen_port: "6666"
   # unique identifier of node group(nodes can only discover each other in the same group)
   rendezvous_string: "pok"
   # nodes only send data to the nodes with the same protocol id.

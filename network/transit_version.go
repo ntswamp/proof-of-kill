@@ -3,13 +3,14 @@ package network
 import (
 	"bytes"
 	"encoding/gob"
+
 	log "github.com/corgi-kx/logcustom"
 )
 
 type version struct {
 	Version  byte
-	Height   int
 	AddrFrom string
+	Height   int
 }
 
 func (v version) serialize() []byte {

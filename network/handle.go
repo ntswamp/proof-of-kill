@@ -237,6 +237,7 @@ func handleGetHash(content []byte) {
 }
 
 //接收到其他节点的区块高度信息,与本地区块高度进行对比
+//forking strategy
 func handleVersion(content []byte) {
 	var lock sync.Mutex
 	lock.Lock()
@@ -247,19 +248,19 @@ func handleVersion(content []byte) {
 	if blc.NEWEST_BLOCK_HEIGHT > v.Height {
 		log.Info("Other nodes have a smaller height,sending version messages to update them...")
 		for {
-			currentHeight := bc.GetLastBlockHeight()
-			if currentHeight < blc.NEWEST_BLOCK_HEIGHT {
+			lastHeight := bc.GetLastBlockHeight()
+			if lastHeight < blc.NEWEST_BLOCK_HEIGHT {
 				log.Info("Updating blocks data, about to send the version message.")
 				time.Sleep(time.Second)
 			} else {
-				newV := version{versionInfo, currentHeight, localAddr}
+				newV := version{versionInfo, localAddr, lastHeight}
 				data := jointMessage(cVersion, newV.serialize())
 				send.SendMessage(buildPeerInfoByAddr(v.AddrFrom), data)
 				break
 			}
 		}
-	} else if blc.NEWEST_BLOCK_HEIGHT < v.Height {
-		log.Debugf("Other nodes have the newer version:%v,requesting hash of new blocks...", v)
+	} else if blc.NEWEST_BLOCK_HEIGHT <= v.Height {
+		log.Debugf("Other nodes may keep the newer version:%v,requesting hash of new blocks...", v)
 		gh := getHash{blc.NEWEST_BLOCK_HEIGHT, localAddr}
 		blc.NEWEST_BLOCK_HEIGHT = v.Height
 		data := jointMessage(cGetHash, gh.serialize())
