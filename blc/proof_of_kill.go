@@ -20,8 +20,8 @@ type proofOfKill struct {
 
 //return PoK instance
 func NewProofOfKill(block *Block) *proofOfKill {
-	var target uint64 = util.Uint64Pow(uint64(10), uint64(TARGET_BIT))
-	verifyAmount := util.Uint64Pow(uint64(10), uint64(VERIFY_BIT))
+	var target uint64 = util.Uint64Pow(uint64(2), uint64(TARGET_BIT))
+	verifyAmount := util.Uint64Pow(uint64(2), uint64(VERIFY_BIT))
 	pok := &proofOfKill{block, target, verifyAmount}
 	return pok
 }
