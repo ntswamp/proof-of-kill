@@ -12,7 +12,7 @@ import (
 /// return true if the creation succeeds.
 func (cli *Cli) newAg() {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("people, you're looking fraught. you must heard that there will be blood when the dark falls later.\nyes, it will.\nbut I know someone hired a strong \"Agent\" to have him survived the killing last night,\nyou may want to take a chance on tavern.(y/n)")
+	fmt.Println("People, you're looking fraught. you must heard that there will be blood when the dark falls later.\nyes, it will.\nbut I know someone hired a brave \"Agent\" to have him survived the killing last night,\nyou may want to take a chance on tavern.(y/n)")
 	fmt.Print("-> ")
 	yn, _ := reader.ReadString('\n')
 	if yn == "n\n" {
@@ -24,28 +24,29 @@ func (cli *Cli) newAg() {
 		var class int
 		var weapon int
 
-		fmt.Println("Please Name Your Agent: ")
+		fmt.Println("Incredibly, a job-hunter-looking agent noticed your visit. you made it with no hesitation.\n\nWhat's his name?")
 		fmt.Print("-> ")
 		name, _ = reader.ReadString('\n')
 		// convert CRLF to LF
 		name = strings.Replace(name, "\n", "", -1)
 
-		fmt.Printf("Such An Impressive Name.\nWelcome To The World Of PoK, %s.\n\n", name)
+		fmt.Printf("\n%s may help you surviving the world of PoK.\n\n", name)
 
-		fmt.Println("Now Tell Me Your Class, By A Number:")
+		fmt.Println("Now tell me his class, by a number:")
 		fmt.Println("#1 Warrior")
 		fmt.Println("#2 Mage")
 		fmt.Println("#3 Archer")
+		fmt.Println("#4 Paladin")
 		fmt.Print("-> ")
 		_, err := fmt.Scanf("%d", &class)
-		for err != nil || (class != 1 && class != 2 && class != 3) {
-			fmt.Println("Type A Number From 1 to 3:")
+		for err != nil || (class != 1 && class != 2 && class != 3 && class != 4) {
+			fmt.Println("Type a number from 1 to 4:")
 			fmt.Print("-> ")
 			_, err = fmt.Scanf("%d", &class)
 		}
 
-		fmt.Printf("Great. Your Agent Looks Like An Experienced %s.\n", agent.CLASS_TEXT[class])
-		fmt.Printf("\nNow Pick A Weapon For Your Agent:\n")
+		fmt.Printf("Your agent looks like an experienced %s, great.\n", agent.CLASS_TEXT[class])
+		fmt.Printf("\nMaybe go acquire a weapon for your man?\n")
 
 		switch class {
 		case agent.CLASS.Warrior:
@@ -78,11 +79,21 @@ func (cli *Cli) newAg() {
 				fmt.Print("-> ")
 				_, err = fmt.Scanf("%d", &weapon)
 			}
+		case agent.CLASS.Paladin:
+			fmt.Println("#7 Hammer Of Judgement")
+			fmt.Println("#8 Bone Crusher")
+			fmt.Print("-> ")
+			_, err := fmt.Scanf("%d", &weapon)
+			for err != nil || (weapon != 7 && weapon != 8) {
+				fmt.Println("Type A Number From 7 to 8:")
+				fmt.Print("-> ")
+				_, err = fmt.Scanf("%d", &weapon)
+			}
 		}
 
-		fmt.Printf("%s? This Is A Wonderful Pick.\n\n", agent.WEAPON_TEXT[weapon])
+		fmt.Printf("%s? definitely a wonderful pick.\n\n", agent.WEAPON_TEXT[weapon])
 
-		fmt.Printf("Your Agent Is Fully Primed Now.\n")
+		fmt.Printf("%s is fully primed now.\n", name)
 		fmt.Printf("Name  : %s\n", name)
 		fmt.Printf("Class : %s\n", agent.CLASS_TEXT[class])
 		fmt.Printf("Weapon: %s\n", agent.WEAPON_TEXT[weapon])
@@ -96,8 +107,8 @@ func (cli *Cli) newAg() {
 		a := agent.New(name, class, weapon)
 		a.Save()
 
-		fmt.Println("Congratulation, You Made A Wise Choice.")
-		fmt.Println("Type `myag` To Greet Your Agent.")
+		fmt.Println("Congratulation, you made a wise choice.")
+		fmt.Println("Type `myag` to greet your agent now.")
 		return
 		/*
 			if strings.Compare("hi", text) == 0 {

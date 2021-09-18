@@ -21,64 +21,63 @@ type Agent struct {
 func New(name string, class int, weapon int) *Agent {
 	a := &Agent{}
 	switch class {
-	case 1:
-		a.Class = "Warrior"
+	case CLASS.Warrior:
 		a.Health = 200
 		a.Attack = 20
 		a.Luck = 5
-	case 2:
-		a.Class = "Mage"
+	case CLASS.Mage:
 		a.Health = 120
-		a.Attack = 35
+		a.Attack = 36
 		a.Luck = 0
-	//archer
-	case 3:
-		a.Class = "Archer"
+	case CLASS.Archer:
 		a.Health = 150
-		a.Attack = 20
+		a.Attack = 16
 		a.Luck = 20
-	default:
-		a.Class = "Warrior"
-		a.Health = 200
-		a.Attack = 20
-		a.Luck = 5
+	case CLASS.Paladin:
+		a.Health = 220
+		a.Attack = 15
+		a.Luck = 11
 	}
 
 	switch weapon {
 	//warrior
-	case 1:
-		a.Weapon = "Two-handed Sword"
+	case WEAPON.TwohandedSword:
 		a.Attack = a.Attack + 18
 		a.Luck = a.Luck + 5
-	case 2:
-		a.Weapon = "Buckler & Axe"
+	case WEAPON.BucklerAxe:
 		a.Attack = a.Attack + 10
 		a.Health = a.Health + 10
 		a.Luck = a.Luck + 1
 
 	//mage
-	case 3:
-		a.Weapon = "Twilight Staff"
+	case WEAPON.TwilightStaff:
 		a.Attack = a.Attack + 10
 		a.Luck = 0
-	case 4:
-		a.Weapon = "Wand Of Dark Warlock"
+	case WEAPON.WandOfDarkWarlock:
 		a.Attack = a.Attack + 30
 		a.Health = a.Health - 30
 		a.Luck = -10
 
 	//archer
-	case 5:
-		a.Weapon = "Longbow"
+	case WEAPON.Longbow:
 		a.Attack = a.Attack + 10
 		a.Luck = a.Luck + 10
-	case 6:
-		a.Weapon = "Spitfire"
+	case WEAPON.Spitfire:
 		a.Attack = a.Attack + 20
 		a.Luck = 0
 
+		//paladin
+	case WEAPON.HammerOfJudgement:
+		a.Attack = a.Attack + 20
+		a.Luck = 3
+	case WEAPON.BoneCrusher:
+		a.Attack = a.Attack + 0
+		a.Luck = a.Luck + 50
+
 	}
 	a.Name = name
+	a.Class = CLASS_TEXT[class]
+	a.Weapon = WEAPON_TEXT[weapon]
 	return a
 }
 
