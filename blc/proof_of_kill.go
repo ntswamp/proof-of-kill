@@ -90,7 +90,7 @@ OUTER:
 //verify PoK
 func (p *proofOfKill) Verify() bool {
 	if p.Kill != p.Target {
-		log.Infof("PoK verification failed. kill target not achieved.")
+		log.Infof("Kill target not achieved.")
 		return false
 	}
 	//generate seed locally
@@ -99,7 +99,7 @@ func (p *proofOfKill) Verify() bool {
 		bc := NewBlockchain()
 		LocalLatestBlockHash := bc.GetBlockHashByHeight(p.Height - 1)
 		if LocalLatestBlockHash == nil {
-			log.Infof("PoK verification failed. the seed(hash) used in incomming block not equals to our latest hash in local chain.")
+			log.Infof("Seed(hash) used in incomming block not equals to our latest hash in local chain.")
 			return false
 		}
 		seed = int64(p.generateSeedByHash(LocalLatestBlockHash))
@@ -115,6 +115,7 @@ func (p *proofOfKill) Verify() bool {
 			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
 			duelResult := p.isKilledOpponent(&tx.Agent, minerRandom, enemyRandom)
 			if duelResult != p.Proof[i] {
+				log.Infof("Block duel result: %v, local result:%v, number of duel:%d", p.Proof[i], duelResult, i)
 				return false
 			}
 		}
@@ -158,7 +159,8 @@ func (p *proofOfKill) generateSeedByHash(hash []byte) uint64 {
 
 //return true if win
 func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enemyRandom int) bool {
-	//log.Infof("my random:%d, enemy random:%d", myRandom, enemyRandom)
+	//DEBUG
+	log.Infof("miner random:%d, enemy random:%d", myRandom, enemyRandom)
 
 	me := p.Agent
 	enemy := *opponent
