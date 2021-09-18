@@ -126,6 +126,7 @@ func mineBlock(t Transactions) {
 }
 
 //接收到区块数据,进行验证后加入数据库
+//Controlling forking strategy by this function.
 func handleBlock(content []byte) {
 	block := &blc.Block{}
 	block.Deserialize(content)
