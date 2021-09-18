@@ -31,6 +31,7 @@ func NewBlockchain() *blockchain {
 func (bc *blockchain) CreataGenesisTransaction(address string, value int, send Sender) {
 	//判断地址格式是否正确
 	if !IsVaildBitcoinAddress(address) {
+		fmt.Printf("Invalid Address: %s\n", address)
 		log.Errorf("Invalid Address: %s\n", address)
 		return
 	}

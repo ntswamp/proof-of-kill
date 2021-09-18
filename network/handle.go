@@ -145,20 +145,30 @@ func handleBlock(content []byte) {
 			log.Info("Genesis block verified, updated local chain.")
 		}
 		//验证上一个区块的hash与本块中prehash是否一致
-		lastBlockHash := bc.GetBlockHashByHeight(block.Height - 1)
-		if lastBlockHash == nil {
+		localPreviousBlockHash := bc.GetBlockHashByHeight(block.Height - 1)
+		if localPreviousBlockHash == nil {
 			//如果找不到上一个区块,可能是还未同步,建立个循环等待同步
 			for {
 				time.Sleep(time.Second)
-				lastBlockHash = bc.GetBlockHashByHeight(block.Height - 1)
-				if lastBlockHash != nil {
+				localPreviousBlockHash = bc.GetBlockHashByHeight(block.Height - 1)
+				if localPreviousBlockHash != nil {
 					log.Debugf("Block of height %d not found, try to resynchronize...", block.Height-1)
 					break
 				}
 			}
 		}
-		//如果上一块的hash等于本块prehash则通过存入本地库
-		if bytes.Equal(lastBlockHash, block.PreHash) {
+		//验证上一个区块的hash与本块中prehash是否一致, 如果上一块的hash等于本块prehash则通过存入本地库
+		if bytes.Equal(localPreviousBlockHash, block.PreHash) {
+			localSameHeightBlockHash := bc.GetBlockHashByHeight(block.Height)
+			if localSameHeightBlockHash != nil {
+				blockByte := bc.GetBlockByHash(localSameHeightBlockHash)
+				localSameHeightBlock := blc.Block{}
+				localSameHeightBlock.Deserialize(blockByte)
+				if localSameHeightBlock.Attempt <= block.Attempt {
+					log.Infof("Local block killed faster, local attempt: %d, incoming block attempt: %d.", localSameHeightBlock.Attempt, block.Attempt)
+					return
+				}
+			}
 			bc.AddBlock(block)
 			utxos := blc.UTXOHandle{bc}
 			//重置utxo数据库
@@ -166,7 +176,7 @@ func handleBlock(content []byte) {
 			log.Infof("Prehash verified, block height:%d,", block.Height)
 			log.Infof("Received block has passed validation, local chain updated:\nBlock height: %d,\nHash: %x", block.Height, block.Hash)
 		} else {
-			log.Infof("上一个块高度为%d的hash值为:%x,与本块中的prehash值:%x不一致,固不存入区块链中", block.Height-1, lastBlockHash, block.Hash)
+			log.Infof("local Previous Block[Height:%d] Hash: %x,\nincomming block's prehash:%x, are not same. refused.", block.Height-1, localPreviousBlockHash, block.PreHash)
 		}
 	} else {
 		log.Errorf("Failed PoK verification. block[%x] won't be added to local chain\nkill:%d, target:%d", block.Hash, pok.Kill, pok.Target)
