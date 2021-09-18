@@ -157,7 +157,7 @@ func (p *proofOfKill) generateSeedByHash(hash []byte) uint64 {
 //return true if win
 func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enemyRandom int) bool {
 	//DEBUG
-	log.Infof("miner random:%d, enemy random:%d", myRandom, enemyRandom)
+	//log.Debugf("miner random:%d, enemy random:%d", myRandom, enemyRandom)
 
 	me := p.Agent
 	enemy := *opponent
