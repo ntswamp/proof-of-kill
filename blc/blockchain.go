@@ -385,6 +385,18 @@ func (bc *blockchain) AddBlock(block *Block) {
 	}
 }
 
+//remove the last one block in localchain，update lastHash
+func (bc *blockchain) RemoveLastBlock(block *Block) {
+	lastHeight := bc.GetLastBlockHeight()
+	if lastHeight != block.Height {
+		return
+	}
+
+	previousBlockHash := bc.GetBlockHashByHeight(block.Height - 1)
+	bc.BD.Delete(block.Hash, database.BlockBucket)
+	bc.BD.Put([]byte(LATEST_BLOCK_HASH_KEY), previousBlockHash, database.BlockBucket)
+}
+
 //对交易信息进行数字签名
 func (bc *blockchain) signatureTransactions(tss []Transaction, wallets *wallets) {
 	for i := range tss {
@@ -572,6 +584,7 @@ func (bc *blockchain) PrintAllBlockInfo() {
 		fmt.Println("  	------------------------------Transaction Data------------------------------")
 		for _, v := range block.Transactions {
 			fmt.Printf("        transaction id:  %x\n", v.TxHash)
+			fmt.Printf("        sender agent  :  %x\n, %x\n", v.Agent.Name, v.Agent.Class)
 			fmt.Println("        tx_input     :")
 			for _, vIn := range v.Vint {
 				fmt.Printf("		 	 tx id      :  %x\n", vIn.TxHash)
@@ -592,9 +605,10 @@ func (bc *blockchain) PrintAllBlockInfo() {
 		}
 		fmt.Println("  	----------------------------------------------------------------------------")
 		fmt.Printf("Time Stamp         %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
-		fmt.Printf("block height       %d\n", block.Height)
-		fmt.Printf("nonce              %d\n", block.Nonce)
-		fmt.Printf("previous hash      %x\n", block.PreHash)
+		fmt.Printf("Block Height       %d\n", block.Height)
+		fmt.Printf("Nonce              %d\n", block.Nonce)
+		fmt.Printf("Previous Hash      %x\n", block.PreHash)
+		fmt.Printf("Attempt            %x\n", block.Attempt)
 		var hashInt big.Int
 		hashInt.SetBytes(block.PreHash)
 		if big.NewInt(0).Cmp(&hashInt) == 0 {

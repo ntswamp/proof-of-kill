@@ -170,6 +170,8 @@ func handleBlock(content []byte) {
 					log.Infof("Local block killed faster, local attempt: %d, incoming block attempt: %d.", localSameHeightBlock.Attempt, block.Attempt)
 					return
 				}
+				//remove local slow block
+				bc.RemoveLastBlock(&localSameHeightBlock)
 				log.Infof("Incoming Block killed faster(attempt:%d), replace local slow block(attempt:%d) with it.", block.Attempt, localSameHeightBlock.Attempt)
 			}
 			bc.AddBlock(block)
