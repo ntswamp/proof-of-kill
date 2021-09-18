@@ -65,7 +65,7 @@ OUTER:
 			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
 
 			duelResult := p.isKilledOpponent(&tx.Agent, myRandom, enemyRandom)
-			if duelResult == true {
+			if duelResult {
 				p.Kill = p.Kill + 1
 			}
 			//a duel is done.
@@ -107,7 +107,7 @@ func (p *proofOfKill) Verify() bool {
 	rand.Seed(seed)
 
 	var i uint64
-	for i = 0; i < p.verifyAmount; i++ {
+	for i = 0; i < p.verifyAmount-1; i++ {
 		for _, tx := range p.Transactions {
 
 			//generate random part of damage
@@ -158,7 +158,7 @@ func (p *proofOfKill) generateSeedByHash(hash []byte) uint64 {
 
 //return true if win
 func (p *proofOfKill) isKilledOpponent(opponent *agent.Agent, myRandom int, enemyRandom int) bool {
-	log.Infof("my random:%d, enemy random:%d", myRandom, enemyRandom)
+	//log.Infof("my random:%d, enemy random:%d", myRandom, enemyRandom)
 
 	me := p.Agent
 	enemy := *opponent

@@ -1,6 +1,6 @@
 blockchain:
   # difficulty
-  mine_difficulty_value: 8
+  mine_difficulty_value: 5
   # verifying bits upon PoK verification. higher bits bring higher security. but never make this value bigger than mine_difficulty_value
   verify_bit: 4
   # mining reward
@@ -15,7 +15,7 @@ network:
   # local monitoring IP
   listen_host: "127.0.0.1"
   # local monitoring port
-  listen_port: "6668"
+  listen_port: "6667"
   # unique identifier of node group(nodes can only discover each other in the same group)
   rendezvous_string: "pok"
   # nodes only send data to the nodes with the same protocol id.
