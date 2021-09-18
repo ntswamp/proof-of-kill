@@ -184,7 +184,7 @@ func handleBlock(content []byte) {
 			log.Infof("local Previous Block[Height:%d] Hash: %x,\nincomming block's prehash:%x, they are not same. refused.", block.Height-1, localPreviousBlockHash, block.PreHash)
 		}
 	} else {
-		log.Errorf("Failed PoK verification. block[%x] won't be added to local chain\nkill:%d, target:%d", block.Hash, pok.Kill, pok.Round)
+		log.Errorf("Failed PoK verification. block[%x] won't be added to local chain\nkill:%d, target round:%d", block.Hash, pok.Kill, pok.Round)
 	}
 }
 
