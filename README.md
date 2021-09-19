@@ -140,7 +140,7 @@ Looking closer to Node 1's log you notice that other nodes will be detected as t
 
 **Making Transfer**
 
-Before transfer, you want to set up the address to receive mining reward up, for each node.(if you haven't set it, nodes won't receive any rewards)</br>
+Before transfer, you want to set up the address to receive mining reward, for each node.(if you don't set it, nodes won't receive any rewards)</br>
 Node 1:
 ```
 -> setmineaddr -a 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd
