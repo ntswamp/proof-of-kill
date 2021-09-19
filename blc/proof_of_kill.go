@@ -41,6 +41,7 @@ func (p *proofOfKill) run() ([]byte, error) {
 	}
 	rand.Seed(seed)
 
+	var round uint64 = 0
 	//print mining progress every 5 seconds
 	times := 0
 	ticker1 := time.NewTicker(5 * time.Second)
@@ -48,11 +49,10 @@ func (p *proofOfKill) run() ([]byte, error) {
 		for {
 			<-t.C
 			times += 5
-			log.Infof("Mining on Height:%d, had been running for %ds.\nCurrent kill:%d, Seed:%d.", p.Height, times, p.Kill, seed)
+			log.Infof("Mining on Height:%d, had been running for %ds.\nCurrent kills:%d, Round:%d, Seed:%d.", p.Height, times, p.Kill, round, seed)
 		}
 	}(ticker1)
 
-	var round uint64 = 0
 	for round < p.Round {
 		for _, tx := range p.Transactions {
 			//other nodes mined a block already?
@@ -103,18 +103,20 @@ func (p *proofOfKill) Verify() bool {
 	}
 	rand.Seed(seed)
 	log.Debugf("seed: %d", seed)
-	var i uint64
-	for i = 0; i < p.verifyAmount-1; i++ {
+	var round uint64 = 0
+	for round < p.verifyAmount-1 {
 		for _, tx := range p.Transactions {
 
 			//generate random part of damage
 			minerRandom := util.RandomInRange(0, p.Agent.Luck)
 			enemyRandom := util.RandomInRange(0, tx.Agent.Luck)
 			duelResult := p.isKilledOpponent(&tx.Agent, minerRandom, enemyRandom)
-			if duelResult != p.Proof[i] {
-				log.Infof("Block duel result: %v, local result:%v, number of duel:%d", p.Proof[i], duelResult, i)
+
+			if duelResult != p.Proof[round] {
+				log.Errorf("original result: %v, local result:%v, number of duel:%d", p.Proof[round], duelResult, round)
 				return false
 			}
+			round++
 		}
 	}
 	return true
