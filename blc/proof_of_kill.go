@@ -104,7 +104,7 @@ func (p *proofOfKill) Verify() bool {
 	rand.Seed(seed)
 	log.Debugf("seed: %d", seed)
 	var round uint64 = 0
-	for round < p.verifyAmount-1 {
+	for round < p.verifyAmount-2 {
 		for _, tx := range p.Transactions {
 
 			//generate random part of damage
