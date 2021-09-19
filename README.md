@@ -7,6 +7,7 @@ This demo only supports mac/linux currently, install golang properly on the ment
 https://golang.org/doc/install
 
 
+
 **Build**
 
 
@@ -16,20 +17,23 @@ https://golang.org/doc/install
 <br>
 
 
+
 **Prepare Multiple Terminals**
 
-You want to simulate multiple nodes of a P2P network by openning multiple terminal windows.
-If you are using VScode, this goal can be easily achieved tapping `Split Terminal` button in the upper right-hand corner of the default terminal window.
->If nodes can't find each other, turn off firewall and retry.
+You want to simulate multiple nodes of a P2P network by opening multiple terminal windows.
+If you are using VScode, this goal can be easily achieved by tapping `Split Terminal` button in the upper right-hand corner of the default terminal window, I suggest an independent one though.
+>If nodes can't find each other, turn off the firewall and retry.
 
 ![Screenshot 2021-09-16 113610](https://user-images.githubusercontent.com/50705651/133540241-1bf10cb4-11fd-4457-aa42-92e427ada100.jpg)
 
 <br>
 
+
+
 **Play with Configuration File**
   
   The key field in the configuration file is `listen_port`, a unique ports stands for a unique node in our simulated P2P network.</br>
-  You can leave other parts default. but don't set `mine_difficulty_value` lower than 8, otherwise you won't see the mining details show up in the log when it done too fast.
+  You can leave other parts default. but don't set `mine_difficulty_value` lower than 8, otherwise you won't see any mining details show up in the log when it was done too fast.
 ```shell
  vim config.yaml
 ```
@@ -62,6 +66,7 @@ network:
 <br>
 
 
+
 **Launch the Node, Hire an Agent**
 
 Launch Node 1
@@ -75,11 +80,12 @@ Just follow the instructions.
 ![agent](https://user-images.githubusercontent.com/50705651/133919000-5366243f-1c9e-45df-90be-9ee35bc2c584.jpg)
 
 
+
 **Create Wallets, Generate the Genesis Block**
 
 
 Once you've got an agent, you unlock more commands.
-Create 3 wallet addresses use command `newwal`.
+Create 3 wallet addresses using command `newwal`.
 ```
 -> newwal
 Mnemonic Word： ["吴昆","黔鳄","板桥","键盘","小膜","潘总","拆股"]
@@ -110,6 +116,8 @@ Open another terminal, Check out Node 1's log by command:(see mining process in 
 
 <br>
 
+
+
 **Synchronize**
 
 Launch Node 2, Node 3 with #listen_port# field in the config.yaml set up to 6667,6668.</br>
@@ -119,6 +127,8 @@ Look closer to Node 1's log you will notice that other nodes are detected.
 
 
 <br>
+
+
 
 **Making Transfer**
 
@@ -147,11 +157,17 @@ transaction has been broadcast.
 ![transaction broadcast](https://user-images.githubusercontent.com/50705651/133918734-326db616-4b2b-40aa-b0ee-82ae70452127.jpg)
 
 
+Once your transaction gets broadcast to the network, nodes which received it will start mining immediately, including yourself.
+But if any other nodes successfully mined the block with the same height as yours, your mining will be aborted.
+![lost](https://user-images.githubusercontent.com/50705651/133919394-b55cc05d-e476-48d0-a08c-977e6a55139f.jpg)
+
 <br>
+
+
 
 **Checking Balance**
 
-Node 1 got 100 coins at the beginning, but after transferrd 60 to Node 2 and Node 3, only 40 coins left for Node 1 now.<br>
+Node 1 got 100 coins at the beginning, but after transferring 60 to Node 2 and 3, only 40 coins are left for Node 1 now.<br>
 Node 2 received 30 from Node 1.<br>
 Node 3 received 30 from Node 1, and mined the block. therefore Node 3 received 10 coins as reward. It holds 40 coins.<br>
 
@@ -181,7 +197,7 @@ You can do more transfer then checking balance on both of 3 nodes to make sure t
 
 **Print Blockchain**
 
-Simply input cmd below to discover details about current PoK chain.
+Simply input cmd below to discover details about the current PoK chain.
 ```
 -> chain
 ```
