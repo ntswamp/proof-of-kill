@@ -80,7 +80,7 @@ Launch Node 1
  ./app
 ```
 
-If you haven't hired any agents yet, bc you just downloaded the program for example, the program will prompt you to have one.
+If you haven't hired any agents yet, bc you just downloaded the program for example, you will be prompted to have one.
 Just follow the instructions.
 
 ![agent](https://user-images.githubusercontent.com/50705651/133919000-5366243f-1c9e-45df-90be-9ee35bc2c584.jpg)
@@ -90,7 +90,7 @@ Just follow the instructions.
 **Create Wallets, Generate the Genesis Block**
 
 
-Once you've got an agent, you unlock more commands.
+Once you've got an agent, more commands are unlocked.
 Create 3 wallet addresses using command `newwal`.
 ```
 -> newwal
@@ -107,13 +107,13 @@ Private Key  ： 4k6iSU5sANDqXZQmQLkt7dbzpJAMJzDrxPGxRVHuKqqh
 Address      ： 1EVrFBakJnhaWAvHQNhCJKLzensYqtJxR5
 ```
 
-Generate the Genesis Block(fund 1st address 100 coins)
+Generate the Genesis Block, fund 1st address 100 coins
 ```
 -> gen -a 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd -v 100
 Made Genesis Block.
 ```
 
-Open another terminal, Check out Node 1's log by command:(see mining process in detail.)
+Open up another terminal, Check out Node 1's log by command:(see mining process in detail.)
 ```shell
  tail -f log6666.txt 
 ```
@@ -126,8 +126,8 @@ Open another terminal, Check out Node 1's log by command:(see mining process in 
 
 **Synchronize**
 
-Launch Node 2, Node 3 with #listen_port# field in the config.yaml set up to 6667,6668.</br>
-Look closer to Node 1's log you will notice that other nodes are detected.
+Launch Node 2, Node 3 with #listen_port# in the config.yaml set up to 6667,6668.</br>
+Looking closer to Node 1's log you notice that other nodes will be detected as they joined the network.
 ![image](https://user-images.githubusercontent.com/50705651/133558870-490772fe-b1a9-4440-8369-07ad64a3d4d3.png)Node 2, Node 3 will synchronize local chain with Node 1 automatically once they get fully launched.
 ![updateothers](https://user-images.githubusercontent.com/50705651/133918709-cbe2991c-1902-40a8-865d-7d860d61e089.jpg)
 
@@ -138,7 +138,7 @@ Look closer to Node 1's log you will notice that other nodes are detected.
 
 **Making Transfer**
 
-Before transfer, you want to set the address to receive mining reward up, for each node.(if you haven't set it, nodes won't receive any rewards)</br>
+Before transfer, you want to set up the address to receive mining reward up, for each node.(if you haven't set it, nodes won't receive any rewards)</br>
 Node 1:
 ```
 -> setmineaddr -a 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd
@@ -163,8 +163,8 @@ transaction has been broadcast.
 ![transaction broadcast](https://user-images.githubusercontent.com/50705651/133918734-326db616-4b2b-40aa-b0ee-82ae70452127.jpg)
 
 
-Once your transaction gets broadcast to the network, nodes which received it will start mining immediately, including yourself.
-But if any other nodes successfully mined the block with the same height as yours, your mining will be aborted.
+Once your transaction gets broadcast to the network, nodes which received it start mining immediately, including yourself.
+But if any other nodes successfully mined the block with the same height as yours in the middle of your mining, your try will be aborted.
 ![lost](https://user-images.githubusercontent.com/50705651/133919394-b55cc05d-e476-48d0-a08c-977e6a55139f.jpg)
 
 <br>
@@ -175,7 +175,7 @@ But if any other nodes successfully mined the block with the same height as your
 
 Node 1 got 100 coins at the beginning, but after transferring 60 to Node 2 and 3, only 40 coins are left for Node 1 now.<br>
 Node 2 received 30 from Node 1.<br>
-Node 3 received 30 from Node 1, and mined the block. therefore Node 3 received 10 coins as reward. It holds 40 coins.<br>
+Node 3 received 30 from Node 1 and mined the block. therefore Node 3 holds 30 + 10(reward) = 40 coins.<br>
 
 ```
 Node 1:
