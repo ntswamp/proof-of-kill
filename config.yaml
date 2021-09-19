@@ -1,5 +1,5 @@
 blockchain:
-  # difficulty. don't make this lower than 16.
+  # difficulty. don't make this lower than 10.
   mine_difficulty_value: 10
   # verifying bits upon PoK verification. higher bits bring higher security. but never make this value bigger than mine_difficulty_value
   verify_bit: 5
