@@ -35,8 +35,10 @@ If you are using VScode, this goal can be easily achieved tapping `Split Termina
 ```
 ```yaml
 blockchain:
-  # difficulty
-  mine_difficulty_value: 9
+  # difficulty. don't make this lower than 10.
+  mine_difficulty_value: 10
+  # verifying bits upon PoK verification. higher bits bring higher security. but never make this value bigger than mine_difficulty_value
+  verify_bit: 5
   # mining reward
   token_reward_num: 10
   # start mining when this number is reached
@@ -59,25 +61,35 @@ network:
 
 <br>
 
-**Launch the Node, Create Wallets, Generate the Genesis Block**
+
+**Launch the Node, Hire an Agent**
 
 Launch Node 1
 ```shell
  ./app
 ```
 
-Create 3 wallet addresses
+If you haven't hired any agents yet, bc you just downloaded the program of course, the program will prompt you to have one.
+Just follow the instructions.
+![agent](https://user-images.githubusercontent.com/50705651/133919000-5366243f-1c9e-45df-90be-9ee35bc2c584.jpg)
+
+
+**Create Wallets, Generate the Genesis Block**
+
+
+Once you've got an agent, you unlock more commands.
+Create 3 wallet addresses use command `newwal`.
 ```
 -> newwal
-Mnemonic Word： ["吴昆","黔鳄","脾虚","牙挺","小膜","野驴","拆股"]
+Mnemonic Word： ["吴昆","黔鳄","板桥","键盘","小膜","潘总","拆股"]
 Private Key  ： 44NwhHw15MSebrVyNmg6m5jm9hGKxmXgjVeZbb7p5z7S
 Address      ： 1Dx8UpokXuv7Bvqa5ocgXKv8PKRLnvjdsd
 -> newwal
-Mnemonic Word： ["愈合","提额","盗汗","头型","专约","拒付","四创"]
+Mnemonic Word： ["愈合","明月","计算","头型","专约","拒付","四创"]
 Private Key  ： 3FZkWLFHNTGFd8MR2QikaN88nP6dmJeDRJkaM4XastN9
 Address      ： 1KNgFa165mjG2dZLcZ2ifhKtaZLu3SR5iF
 -> newwal
-Mnemonic Word： ["胸水","榆蘑","范明","顺诚","沉香","无畏","肾盏"]
+Mnemonic Word： ["几何","榆蘑","范明","顺诚","沉香","无畏","光露"]
 Private Key  ： 4k6iSU5sANDqXZQmQLkt7dbzpJAMJzDrxPGxRVHuKqqh
 Address      ： 1EVrFBakJnhaWAvHQNhCJKLzensYqtJxR5
 ```
@@ -92,7 +104,8 @@ Open another terminal, Check out Node 1's log by command:(see mining process in 
 ```shell
  tail -f log6666.txt 
 ```
-![image](https://user-images.githubusercontent.com/50705651/133558037-c9e4f4e2-933d-463f-a0d7-d84a87947e1e.png)
+![tail](https://user-images.githubusercontent.com/50705651/133919007-1c064936-454f-4920-8aaa-6d3d54e4ff6f.jpg)
+
 
 <br>
 
@@ -165,7 +178,8 @@ Checking balance between 3 nodes to verify if the chain is working properly.
 
 
 **Print Blockchain**
-Simply input 5 letters to discover details about PoK chain.
+
+Simply input cmd below to discover details about current PoK chain.
 ```
 -> chain
 ```
