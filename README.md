@@ -26,9 +26,9 @@ https://golang.org/doc/install
 
 **Prepare Multiple Terminals**
 
-You want to simulate multiple nodes of a P2P network by opening multiple terminal windows.
+You want to simulate multiple nodes of a P2P network by opening up several terminal windows.
 If you are using VScode, this goal can be easily achieved by tapping `Split Terminal` button in the upper right-hand corner of the default terminal window. I suggest an independent one though.
->If nodes can't find each other, turn off the firewall and retry.
+>If nodes can't reach each other, turn off the firewall and retry.
 
 ![Screenshot 2021-09-16 113610](https://user-images.githubusercontent.com/50705651/133540241-1bf10cb4-11fd-4457-aa42-92e427ada100.jpg)
 
@@ -38,8 +38,8 @@ If you are using VScode, this goal can be easily achieved by tapping `Split Term
 
 **Play with Configuration File**
   
-  The key field in the configuration file is `listen_port`, a unique ports stands for a unique node in our simulated P2P network.</br>
-  You can leave other parts default. but don't set `mine_difficulty_value` lower than 8, otherwise you won't see any mining details show up in the log when it was done too fast.
+  The key field in the configuration file is `listen_port`, a unique port stands for a unique node in our simulated P2P network.</br>
+  You can leave other sections default. but don't set `mine_difficulty_value` lower than 10, otherwise you won't see any mining details show up in the log when it was done too fast.
 ```shell
  vim config.yaml
 ```
@@ -80,10 +80,11 @@ Launch Node 1
  ./app
 ```
 
-If you haven't hired any agents yet, bc you just downloaded the program for example, you will be prompted to have one.
+Becasue you haven't hired any agents yet, you will be prompted to have one.
 Just follow the instructions.
 
 ![agent](https://user-images.githubusercontent.com/50705651/133921136-7e1184b8-85a4-48b5-826e-896fc311d2a7.jpg)
+
 
 
 
