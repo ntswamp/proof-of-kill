@@ -23,7 +23,7 @@ func New(name string, class int, weapon int) *Agent {
 	switch class {
 	case CLASS.Warrior:
 		a.Health = 200
-		a.Attack = 20
+		a.Attack = 16
 		a.Luck = 5
 	case CLASS.Mage:
 		a.Health = 120
