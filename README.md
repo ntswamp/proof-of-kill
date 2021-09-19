@@ -69,8 +69,9 @@ Launch Node 1
  ./app
 ```
 
-If you haven't hired any agents yet, bc you just downloaded the program of course, the program will prompt you to have one.
+If you haven't hired any agents yet, bc you just downloaded the program for example, the program will prompt you to have one.
 Just follow the instructions.
+
 ![agent](https://user-images.githubusercontent.com/50705651/133919000-5366243f-1c9e-45df-90be-9ee35bc2c584.jpg)
 
 
@@ -171,7 +172,8 @@ Address: 1EVrFBakJnhaWAvHQNhCJKLzensYqtJxR5
 Balance：40
 ```
 
-Checking balance between 3 nodes to verify if the chain is working properly.
+You can do more transfer then checking balance on both of 3 nodes to make sure the chain is working properly.
+
 ![comparing balance](https://user-images.githubusercontent.com/50705651/133918765-a99cc1cc-95a2-402e-b19a-26eb9562d65e.jpg)
 
 <br>
