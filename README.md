@@ -1,5 +1,10 @@
 # proof-of-kill
 
+Individual-friendly and low-power-consumption are rarely achieved at the same time in blockchain systems nowadays.
+In this implementation I try to resolve this issues by creating a new type of consensus model named "PoK(Proof of Kill)", which uses a game-like frontend instead of CPU power to hold a race between nodes with safety guaranteed.
+![pok](https://user-images.githubusercontent.com/50705651/133920217-fc2af110-7ab0-4f5d-91bb-613c12c97fc6.jpg)
+
+
 
 ### testing program：
 
@@ -21,7 +26,7 @@ https://golang.org/doc/install
 **Prepare Multiple Terminals**
 
 You want to simulate multiple nodes of a P2P network by opening multiple terminal windows.
-If you are using VScode, this goal can be easily achieved by tapping `Split Terminal` button in the upper right-hand corner of the default terminal window, I suggest an independent one though.
+If you are using VScode, this goal can be easily achieved by tapping `Split Terminal` button in the upper right-hand corner of the default terminal window. I suggest an independent one though.
 >If nodes can't find each other, turn off the firewall and retry.
 
 ![Screenshot 2021-09-16 113610](https://user-images.githubusercontent.com/50705651/133540241-1bf10cb4-11fd-4457-aa42-92e427ada100.jpg)
@@ -197,7 +202,7 @@ You can do more transfer then checking balance on both of 3 nodes to make sure t
 
 **Print Blockchain**
 
-Simply input cmd below to discover details about the current PoK chain.
+Simply type cmd below to discover details about the current PoK chain.
 ```
 -> chain
 ```
