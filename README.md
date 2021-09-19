@@ -83,7 +83,8 @@ Launch Node 1
 If you haven't hired any agents yet, bc you just downloaded the program for example, you will be prompted to have one.
 Just follow the instructions.
 
-![agent](https://user-images.githubusercontent.com/50705651/133919000-5366243f-1c9e-45df-90be-9ee35bc2c584.jpg)
+![agent](https://user-images.githubusercontent.com/50705651/133921136-7e1184b8-85a4-48b5-826e-896fc311d2a7.jpg)
+
 
 
 
