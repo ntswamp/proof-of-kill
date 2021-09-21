@@ -1,6 +1,6 @@
 # proof-of-kill
 
-Individual-friendly and low-power-consumption are rarely achieved at the same time in blockchain systems nowadays.
+Individual-friendliness and low-power-consumption are rarely achieved at the same time in blockchain systems nowadays.
 In this implementation I try to resolve this issues by creating a new type of consensus model named "PoK(Proof of Kill)", which uses a game-like frontend(to be called "Agent") instead of CPU power to hold a race between nodes with safety guaranteed.
 
 ![pok](https://user-images.githubusercontent.com/50705651/133920498-e6d197ab-75b8-456d-9a94-3da4d95714ad.jpg)
