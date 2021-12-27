@@ -11,20 +11,19 @@ import (
 )
 
 type Block struct {
-	//上一个区块的hash
-	PreHash []byte
-	//数据data
+	//hash of the provious block
+	PreHash      []byte
 	Transactions []Transaction
-	//时间戳
-	TimeStamp int64
-	//区块高度
-	Height int
-	//本区块hash
+	TimeStamp    int64
+	Height       int
+	//hash of this block
 	Hash []byte
 	//for verification
 	Agent agent.Agent
+	//recording wins or loses for mining fights
 	Proof []bool
-	Kill  uint64
+	//how many kills this block includes
+	Kill uint64
 }
 
 //生成创世区块
