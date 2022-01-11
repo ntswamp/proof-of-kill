@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math/big"
 	"os"
 	"time"
@@ -582,6 +583,16 @@ func (bc *blockchain) findAllUTXOs() map[string][]*UTXO {
 
 //打印区块链详细信息
 func (bc *blockchain) PrintAllBlockInfo() {
+	logFile, err := os.OpenFile("log_blockchain.txt",
+		os.O_CREATE|os.O_RDWR, 0644)
+
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	w := io.MultiWriter(os.Stdout, logFile)
+
 	blcIterator := NewBlockchainIterator(bc)
 	for {
 		block := blcIterator.Next()
@@ -589,41 +600,41 @@ func (bc *blockchain) PrintAllBlockInfo() {
 			log.Error("Genesis block not found.")
 			return
 		}
-		fmt.Println("========================================================================================================")
-		fmt.Printf("Block Hash         %x\n", block.Hash)
-		fmt.Println("  	------------------------------Transaction Data------------------------------")
+		fmt.Fprintln(w, "========================================================================================================")
+		fmt.Fprintf(w, "Block Hash         %x\n", block.Hash)
+		fmt.Fprintln(w, "  	------------------------------Transaction Data------------------------------")
 		for _, v := range block.Transactions {
-			fmt.Printf("        transaction id:  %x\n", v.TxHash)
-			fmt.Printf("        sender agent  :  %s, %s\n", v.Agent.Name, v.Agent.Class)
-			fmt.Println("        tx_input     :")
+			fmt.Fprintf(w, "        transaction id:  %x\n", v.TxHash)
+			fmt.Fprintf(w, "        sender agent  :  %s, %s\n", v.Agent.Name, v.Agent.Class)
+			fmt.Fprintln(w, "        tx_input     :")
 			for _, vIn := range v.Vint {
-				fmt.Printf("		 	 tx id      :  %x\n", vIn.TxHash)
-				fmt.Printf("			 index      :  %d\n", vIn.Index)
-				fmt.Printf("			 signature  :  %x\n", vIn.Signature)
-				fmt.Printf("			 pubkey     :  %x\n", vIn.PublicKey)
-				fmt.Printf("			 address    :  %s\n", GetAddressFromPublicKey(vIn.PublicKey))
+				fmt.Fprintf(w, "		 	 tx id      :  %x\n", vIn.TxHash)
+				fmt.Fprintf(w, "			 index      :  %d\n", vIn.Index)
+				fmt.Fprintf(w, "			 signature  :  %x\n", vIn.Signature)
+				fmt.Fprintf(w, "			 pubkey     :  %x\n", vIn.PublicKey)
+				fmt.Fprintf(w, "			 address    :  %s\n", GetAddressFromPublicKey(vIn.PublicKey))
 			}
-			fmt.Println("        tx_output     :")
+			fmt.Fprintln(w, "        tx_output     :")
 			for index, vOut := range v.Vout {
-				fmt.Printf("			 value      :  %d    \n", vOut.Value)
-				fmt.Printf("			 pubkey hash:  %x    \n", vOut.PublicKeyHash)
-				fmt.Printf("			 address    :  %s\n", GetAddressFromPublicKeyHash(vOut.PublicKeyHash))
+				fmt.Fprintf(w, "			 value      :  %d    \n", vOut.Value)
+				fmt.Fprintf(w, "			 pubkey hash:  %x    \n", vOut.PublicKeyHash)
+				fmt.Fprintf(w, "			 address    :  %s\n", GetAddressFromPublicKeyHash(vOut.PublicKeyHash))
 				if len(v.Vout) != 1 && index != len(v.Vout)-1 {
-					fmt.Println("			---------------")
+					fmt.Fprintln(w, "			---------------")
 				}
 			}
 		}
-		fmt.Println("  	----------------------------------------------------------------------------")
-		fmt.Printf("Time Stamp         %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
-		fmt.Printf("Height             %d\n", block.Height)
-		fmt.Printf("Kill               %d\n", block.Kill)
-		fmt.Printf("Previous Hash      %x\n", block.PreHash)
-		fmt.Printf("Agent              %s,%s\n", block.Agent.Name, block.Agent.Class)
+		fmt.Fprintln(w, "  	----------------------------------------------------------------------------")
+		fmt.Fprintf(w, "Time Stamp         %s\n", time.Unix(block.TimeStamp, 0).Format("2006-01-02 03:04:05 PM"))
+		fmt.Fprintf(w, "Height             %d\n", block.Height)
+		fmt.Fprintf(w, "Kill               %d\n", block.Kill)
+		fmt.Fprintf(w, "Previous Hash      %x\n", block.PreHash)
+		fmt.Fprintf(w, "Agent              %s,%s\n", block.Agent.Name, block.Agent.Class)
 		var hashInt big.Int
 		hashInt.SetBytes(block.PreHash)
 		if big.NewInt(0).Cmp(&hashInt) == 0 {
 			break
 		}
 	}
-	fmt.Println("========================================================================================================")
+	fmt.Fprintln(w, "========================================================================================================")
 }
